@@ -19,7 +19,7 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Show all books in Library", key = "showAllBooks")
     public void printAllBooks() {
-
+        bookService.printAllBooks();
 
     }
 
@@ -33,7 +33,7 @@ public class LibraryCommands {
 
     }
 
-    @ShellMethod(value = "Show book in Library by Name", key = "showBooksByName")
+    @ShellMethod(value = "Show book in Library by Genre", key = "showBooksByGenre")
     public void showBooksByGenre(@ShellOption String bookName) {
 
     }
