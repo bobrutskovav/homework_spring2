@@ -26,50 +26,84 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public void storeBook(Book book) {
-        //ToDo подумать как записать в таблицу...Вероятно нужно сделать поиск по названию жанра и автору и взять айди...если их нет, надо сгенерить новый айди и записать в табличку...
-
         Map<String, String> params = new HashMap<>();
+        params.put("bookId", book.getId());
+        params.put("title", book.getTitle());
         params.put("authorName", book.getAuthorName());
-        String id;
-        try {
-            id = jdbc
-                    .queryForObject("SELECT A.ID FROM AUTHOR A WHERE A.AUTHORNAME = :authorName", params, String.class);
-        } catch (EmptyResultDataAccessException e) {
-            id = null;
+        params.put("genreTitle", book.getGenreTitle());
+        String authorId = getObjectOrNull("SELECT A.ID FROM AUTHOR A WHERE A.AUTHORNAME = :authorName", params,
+                String.class);
+        if (authorId == null) {
+            authorId = UUID.randomUUID().toString();
+            params.put("authorId", authorId);
+            jdbc.update("INSERT INTO AUTHOR (ID,AUTHORNAME) VALUES (:authorId,:authorName)", params);
         }
-        if (id == null) {
-            id = UUID.randomUUID().toString();
-            // jdbc.update("INSERT")
-        }
+        params.put("authorId", authorId);
 
-        //jdbc.query("insert into books (id, title,author,genre) values (, 'Book1','author1','genre1')")
+        String genreId = getObjectOrNull("SELECT G.ID FROM GENRE G WHERE G.GENRETITLE = :genreTitle", params,
+                String.class);
+
+        if (genreId == null) {
+            genreId = UUID.randomUUID().toString();
+            params.put("genreId", genreId);
+            jdbc.update("INSERT INTO GENRE (ID,GENRETITLE) VALUES (:genreId,:genreTitle)", params);
+        }
+        params.put("genreId", genreId);
+        jdbc.update("INSERT INTO BOOKS (ID, TITLE,AUTHORID,GENREID) VALUES (:bookId ,:title,:authorId,:genreId)",
+                params);
 
     }
 
     @Override
     public List<Book> getAllBooks() {
         return jdbc
-                .query("select * from Books JOIN Author ON Books.author = Author.authorName JOIN Genre ON Books.genre = Genre.genreTitle ",
+                .query("SELECT * FROM BOOKS JOIN AUTHOR ON BOOKS.AUTHORID = AUTHOR.ID JOIN GENRE ON BOOKS.GENREID = GENRE.ID",
                         new HashMap<>(), new BookMapper());
     }
 
     @Override
-    public Book getBookByName(String name) {
-        return null;
+    public Book getBookByTitle(String title) {
+        Map<String, String> params = new HashMap<>();
+        params.put("title", title);
+        String id = getObjectOrNull("SELECT ID FROM BOOKS WHERE BOOKS.TITLE = :title", params, String.class);
+        if (id == null) {
+            return null;
+        }
+        return getBookByID(id);
     }
 
     @Override
-    public List<Book> getAllByGenre(String genre) {
-        return null;
+    public Book getBookByID(String id) {
+        Book book = null;
+        Map<String, String> params = new HashMap<>();
+        params.put("id", id);
+        try {
+            book = jdbc.queryForObject(
+                    "SELECT * FROM BOOKS JOIN AUTHOR ON BOOKS.AUTHORID = AUTHOR.ID JOIN GENRE ON BOOKS.GENREID = GENRE.ID WHERE BOOKS.ID = :id",
+                    params, new BookMapper());
+        } catch (EmptyResultDataAccessException e) {
+
+        }
+        return book;
+
     }
 
+    private <T> T getObjectOrNull(String query, Map<String, String> params, Class<T> clazz) {
+        T founded;
+        try {
+            founded = jdbc.queryForObject(query, params, clazz);
+        } catch (EmptyResultDataAccessException e) {
+            founded = null;
+        }
+        return founded;
+    }
 
     private static class BookMapper implements RowMapper<Book> {
 
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
             Book book = new Book();
-            book.setId(resultSet.getInt("id"));
+            book.setId(resultSet.getString("id"));
             book.setTitle(resultSet.getString("title"));
             book.setAuthorName(resultSet.getString("authorName"));
             book.setGenreTitle(resultSet.getString("genreTitle"));

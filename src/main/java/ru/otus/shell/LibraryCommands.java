@@ -14,7 +14,6 @@ public class LibraryCommands {
     @Autowired
     public LibraryCommands(BookService bookService) {
         this.bookService = bookService;
-
     }
 
     @ShellMethod(value = "Show all books in Library", key = "showAllBooks")
@@ -24,18 +23,13 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Put new book in Library", key = "newBook")
-    public void storeNewBook(@ShellOption String bookName,@ShellOption String author,@ShellOption String genre) {
-
+    public void storeNewBook(@ShellOption String title, @ShellOption String author, @ShellOption String genre) {
+        bookService.storeNewBook(title, author, genre);
     }
 
-    @ShellMethod(value = "Show book in Library by Name", key = "showBooksByName")
-    public void showBookByName(@ShellOption String bookName) {
-
-    }
-
-    @ShellMethod(value = "Show book in Library by Genre", key = "showBooksByGenre")
-    public void showBooksByGenre(@ShellOption String bookName) {
-
+    @ShellMethod(value = "Show book in Library by title", key = "findByTitle")
+    public void showBookByTitle(@ShellOption String title) {
+        bookService.printByName(title);
     }
 
 }

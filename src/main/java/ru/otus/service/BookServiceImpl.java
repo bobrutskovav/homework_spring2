@@ -1,6 +1,7 @@
 package ru.otus.service;
 
 import java.util.Random;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookDao;
@@ -21,7 +22,7 @@ public class BookServiceImpl implements BookService {
     public void storeNewBook(String bookName, String author, String genre) {
         Book newBook = new Book();
         Random generator = new Random();
-        newBook.setId(generator.nextInt() + 1);
+        newBook.setId(UUID.randomUUID().toString());
         newBook.setTitle(bookName);
         newBook.setAuthorName(author);
         newBook.setGenreTitle(genre);
@@ -34,10 +35,7 @@ public class BookServiceImpl implements BookService {
         System.out.println("Here is all book we have:");
         for (Book book :
                 bookDao.getAllBooks()) {
-            System.out.println("==============");
-            System.out.println("Title: " + book.getTitle());
-            System.out.println("Author: " + book.getAuthorName());
-            System.out.println("Genre: " + book.getGenreTitle());
+            printInfoAboutBook(book);
         }
     }
 
@@ -48,6 +46,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
+        Book book = bookDao.getBookByTitle(name);
+        if (book != null) {
+            printInfoAboutBook(book);
+        } else {
+            System.out.println("No book found by Title " + name);
+        }
+    }
 
+
+    private void printInfoAboutBook(Book book) {
+        System.out.println("==============");
+        System.out.println("ID: " + book.getId());
+        System.out.println("Title: " + book.getTitle());
+        System.out.println("Author: " + book.getAuthorName());
+        System.out.println("Genre: " + book.getGenreTitle());
     }
 }
