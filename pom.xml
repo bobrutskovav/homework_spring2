@@ -46,4 +46,12 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>nspkrep</id>
+            <name>NspkRepository</name>
+            <url>http://msk1-vm-nexus01.unix.nspk.ru:8081/nexus/content/repositories/central</url>
+        </repository>
+    </repositories>
+
 </project>
