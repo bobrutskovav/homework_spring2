@@ -1,11 +1,24 @@
 package ru.otus.domain;
 
+import javax.persistence.*;
+
+
+@Entity
+@Table(name="Books")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private String id;
     private String title;
-    private String authorName;
-    private String genreTitle;
+
+    @JoinColumn(referencedColumnName="id")
+    @ManyToOne
+    private Author author;
+
+    @JoinColumn(referencedColumnName="id")
+    @ManyToOne
+    private Genre genre;
 
     public String getId() {
         return id;
@@ -23,20 +36,20 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public Author getAuthor() {
+        return author;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
-    public String getGenreTitle() {
-        return genreTitle;
+    public Genre getGenre() {
+        return genre;
     }
 
-    public void setGenreTitle(String genreTitle) {
-        this.genreTitle = genreTitle;
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     @Override
@@ -44,8 +57,8 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", authorName='" + authorName + '\'' +
-                ", genreTitle='" + genreTitle + '\'' +
+                ", author='" + author + '\'' +
+                ", genre='" + genre + '\'' +
                 '}';
     }
 }
