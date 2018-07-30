@@ -1,13 +1,14 @@
 package ru.otus.dao;
 
-import org.springframework.stereotype.Repository;
-import ru.otus.domain.Book;
-
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.domain.Book;
 
+@Transactional
 @SuppressWarnings("JpaQlInspection")
 @Repository
 public class LibraryJpaRepository implements BookDao {

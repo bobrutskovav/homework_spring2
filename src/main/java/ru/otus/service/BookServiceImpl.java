@@ -1,14 +1,13 @@
 package ru.otus.service;
 
+import java.util.Random;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
-
-import java.util.Random;
-import java.util.UUID;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -22,13 +21,13 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void storeNewBook(String bookName, Author author, Genre genre) {
+    public void storeNewBook(String bookName, String authorName, String genreTitle) {
         Book newBook = new Book();
         Random generator = new Random();
         newBook.setId(UUID.randomUUID().toString());
         newBook.setTitle(bookName);
-        newBook.setAuthor(author);
-        newBook.setGenre(genre);
+        newBook.setAuthor(new Author(authorName));
+        newBook.setGenre(new Genre(genreTitle));
         bookDao.storeBook(newBook);
         System.out.println("Book is stored");
     }
@@ -62,7 +61,7 @@ public class BookServiceImpl implements BookService {
         System.out.println("==============");
         System.out.println("ID: " + book.getId());
         System.out.println("Title: " + book.getTitle());
-        System.out.println("Author: " + book.getAuthor());
-        System.out.println("Genre: " + book.getGenre());
+        System.out.println("Author: " + book.getAuthor().getName());
+        System.out.println("Genre: " + book.getGenre().getTitle());
     }
 }

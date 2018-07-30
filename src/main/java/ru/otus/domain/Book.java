@@ -1,23 +1,30 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 
 @Entity
-@Table(name="Books")
+@Table(name = "BOOKS")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String title;
 
-    @JoinColumn(referencedColumnName="id")
-    @ManyToOne
+    @JoinColumn(name = "AUTHOR_ID")
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Author author;
 
-    @JoinColumn(referencedColumnName="id")
-    @ManyToOne
+    @JoinColumn(name = "GENRE_ID")
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Genre genre;
 
     public String getId() {
