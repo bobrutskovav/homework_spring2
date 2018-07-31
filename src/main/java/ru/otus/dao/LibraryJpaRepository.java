@@ -16,6 +16,7 @@ public class LibraryJpaRepository implements BookDao {
     @PersistenceContext
     private EntityManager em;
 
+    @Transactional
     @Override
     public void storeBook(Book book) {
         em.persist(book);

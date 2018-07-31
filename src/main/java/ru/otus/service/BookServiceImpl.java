@@ -1,7 +1,5 @@
 package ru.otus.service;
 
-import java.util.Random;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookDao;
@@ -23,8 +21,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void storeNewBook(String bookName, String authorName, String genreTitle) {
         Book newBook = new Book();
-        Random generator = new Random();
-        newBook.setId(UUID.randomUUID().toString());
         newBook.setTitle(bookName);
         newBook.setAuthor(new Author(authorName));
         newBook.setGenre(new Genre(genreTitle));

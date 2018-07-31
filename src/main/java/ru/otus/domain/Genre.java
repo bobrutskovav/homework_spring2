@@ -12,9 +12,9 @@ import javax.persistence.Table;
 public class Genre {
 
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(name = "ID", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Column(name = "GENRETITLE")
     private String title;
 
@@ -22,11 +22,14 @@ public class Genre {
         this.title = genreTitle;
     }
 
-    public Integer getId() {
+    public Genre() {
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

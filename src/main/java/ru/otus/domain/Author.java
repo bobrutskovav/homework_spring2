@@ -10,10 +10,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "AUTHOR")
 public class Author {
+
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(name = "ID", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "AUTHORNAME")
     private String name;
@@ -22,11 +23,15 @@ public class Author {
         this.name = name;
     }
 
-    public Integer getId() {
+
+    public Author() {
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
