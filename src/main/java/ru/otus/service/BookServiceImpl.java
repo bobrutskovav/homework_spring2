@@ -70,6 +70,11 @@ public class BookServiceImpl implements BookService {
         });
     }
 
+    @Override
+    public void addCommentToBook(String comment, String bookId) {
+
+    }
+
 
     private void printInfoAboutBook(Book book) {
         System.out.println("==============");
@@ -77,6 +82,6 @@ public class BookServiceImpl implements BookService {
         System.out.println("Title: " + book.getTitle());
         System.out.println("Author: " + book.getAuthor().getName());
         System.out.println("Genre: " + book.getGenre().getTitle());
-        book.getComments().forEach(c -> System.out.println("\n Comment :" + c.getText()));
+        book.getComment().forEach(c -> System.out.println("\nComment :" + c.getText()));
     }
 }

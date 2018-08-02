@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,9 +32,9 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.ALL})
     private Genre genre;
 
-    @JoinColumn(name = "COMMENT_BOOKID")
-    @OneToMany(cascade = {CascadeType.ALL})
-    private List<Comment> comments;
+    @JoinColumn(name = "BOOKID")
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private List<Comment> comment;
 
     public Long getId() {
         return id;
@@ -70,8 +71,8 @@ public class Book {
         this.genre = genre;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Comment> getComment() {
+        return comment;
     }
 
     @Override
