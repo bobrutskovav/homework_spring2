@@ -1,8 +1,9 @@
 package ru.otus.service;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.dao.BookDao;
+import ru.otus.dao.LibraryDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
@@ -10,11 +11,11 @@ import ru.otus.domain.Genre;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
+    private final LibraryDao libraryDao;
 
     @Autowired
-    public BookServiceImpl(BookDao bookDao) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(LibraryDao libraryDao) {
+        this.libraryDao = libraryDao;
     }
 
 
@@ -24,7 +25,14 @@ public class BookServiceImpl implements BookService {
         newBook.setTitle(bookName);
         newBook.setAuthor(new Author(authorName));
         newBook.setGenre(new Genre(genreTitle));
-        bookDao.storeBook(newBook);
+
+        Book foundedBook = libraryDao.getBook(newBook);
+        if (foundedBook != null) {
+            System.out.println("This book already here!");
+            printInfoAboutBook(foundedBook);
+            return;
+        }
+        libraryDao.storeBook(newBook);
         System.out.println("Book is stored");
     }
 
@@ -32,7 +40,7 @@ public class BookServiceImpl implements BookService {
     public void printAllBooks() {
         System.out.println("Here is all book we have:");
         for (Book book :
-                bookDao.getAllBooks()) {
+                libraryDao.getAllBooks()) {
             printInfoAboutBook(book);
         }
     }
@@ -44,12 +52,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
-        Book book = bookDao.getBookByTitle(name);
+        Book book = libraryDao.getBookByTitle(name);
         if (book != null) {
             printInfoAboutBook(book);
         } else {
             System.out.println("No book found by Title " + name);
         }
+    }
+
+    @Override
+    public void printAllGenres() {
+        List<Genre> allGenres = libraryDao.getAllGenres();
+
+        allGenres.forEach(g -> {
+            System.out.println("====Genre====");
+            System.out.println(g.toString());
+        });
     }
 
 
@@ -59,5 +77,6 @@ public class BookServiceImpl implements BookService {
         System.out.println("Title: " + book.getTitle());
         System.out.println("Author: " + book.getAuthor().getName());
         System.out.println("Genre: " + book.getGenre().getTitle());
+        book.getComments().forEach(c -> System.out.println("\n Comment :" + c.getText()));
     }
 }

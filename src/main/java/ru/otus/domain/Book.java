@@ -1,5 +1,6 @@
 package ru.otus.domain;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -18,7 +20,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", updatable = false, nullable = false)
-    private long id;
+    private Long id;
     private String title;
 
     @JoinColumn(name = "AUTHOR_ID")
@@ -29,11 +31,15 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.ALL})
     private Genre genre;
 
-    public long getId() {
+    @JoinColumn(name = "COMMENT_BOOKID")
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<Comment> comments;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,6 +68,10 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
     }
 
     @Override

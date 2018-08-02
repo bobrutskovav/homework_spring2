@@ -22,6 +22,20 @@ public class LibraryCommands {
 
     }
 
+
+    @ShellMethod(value = "Show all genres in Library", key = "showAllGenres")
+    public void printAllGenres() {
+        bookService.printAllGenres();
+
+    }
+
+    @ShellMethod(value = "Add comment to Book", key = "addComment")
+    public void addComment(@ShellOption({"-id", "--bookId"}) String bookId,
+            @ShellOption({"-c", "--comment"}) String comment) {
+        bookService.addCommentToBook(comment, bookId);
+
+    }
+
     @ShellMethod(value = "Put new book in Library", key = "newBook")
     public void storeNewBook(@ShellOption({"-t", "--title"}) String title,
             @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {

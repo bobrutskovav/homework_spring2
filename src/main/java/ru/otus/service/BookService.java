@@ -6,4 +6,8 @@ public interface BookService {
      void printAllBooks();
      void printAllByGenre(String genre);
      void printByName(String name);
+
+     void printAllGenres();
+
+     void addCommentToBook(String comment, String bookId);
 }

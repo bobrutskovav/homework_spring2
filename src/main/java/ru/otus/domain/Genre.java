@@ -14,7 +14,7 @@ public class Genre {
     @Id
     @Column(name = "ID", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "GENRETITLE")
     private String title;
 
@@ -25,11 +25,11 @@ public class Genre {
     public Genre() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,5 +39,13 @@ public class Genre {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 }
