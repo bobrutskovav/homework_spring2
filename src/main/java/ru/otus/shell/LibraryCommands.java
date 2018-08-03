@@ -30,7 +30,7 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Add comment to Book", key = "addComment")
-    public void addComment(@ShellOption({"-id", "--bookId"}) String bookId,
+    public void addComment(@ShellOption({"-id", "--bookId"}) Long bookId,
             @ShellOption({"-c", "--comment"}) String comment) {
         bookService.addCommentToBook(comment, bookId);
 
@@ -45,6 +45,11 @@ public class LibraryCommands {
     @ShellMethod(value = "Show book in Library by title", key = "findByTitle")
     public void showBookByTitle(@ShellOption String title) {
         bookService.printByName(title);
+    }
+
+    @ShellMethod(value = "Remove book from library with id", key = "removeBook")
+    public void removeById(@ShellOption({"-id", "--bookId"}) Long id) {
+        bookService.deleteBook(id);
     }
 
 }

@@ -44,7 +44,7 @@ public class LibraryJpaRepository implements LibraryDao {
             em.persist(book.getGenre());
         }
 
-        em.persist(book);
+        em.merge(book);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class LibraryJpaRepository implements LibraryDao {
     @Override
     public Book getBook(Book book) {
         TypedQuery<Book> searchBook = em.createQuery(
-                "SELECT b FROM Book b, Author a, Genre g,FROM Comment WHERE b.title = :bookTitle AND a.name = :authorName AND g.title = :genreTitle",
+                "SELECT b FROM Book b, Author a, Genre g, Comment c WHERE b.title = :bookTitle AND a.name = :authorName AND g.title = :genreTitle",
                 Book.class);
         searchBook.setParameter("bookTitle", book.getTitle());
         searchBook.setParameter("authorName", book.getAuthor().getName());
@@ -82,7 +82,7 @@ public class LibraryJpaRepository implements LibraryDao {
     }
 
     @Override
-    public Book getBookByID(String id) {
+    public Book getBookByID(Long id) {
         return em.find(Book.class, id);
     }
 
@@ -92,5 +92,11 @@ public class LibraryJpaRepository implements LibraryDao {
                 "SELECT g FROM Genre g",
                 Genre.class);
         return query.getResultList();
+    }
+
+    @Override
+    public void removeBookById(Long id) {
+        Book book = em.find(Book.class, id);
+        em.remove(book);
     }
 }

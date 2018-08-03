@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.dao.LibraryDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
 @Service
@@ -71,8 +72,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void addCommentToBook(String comment, String bookId) {
+    public void addCommentToBook(String comment, Long bookId) {
+        Book foundedBook = libraryDao.getBookByID(bookId);
+        if (foundedBook == null) {
+            System.out.println(String.format("Book with ID %s not found", bookId));
+            return;
+        }
+        foundedBook.getComment().add(new Comment(bookId, comment));
+        libraryDao.storeBook(foundedBook);
+        printInfoAboutBook(libraryDao.getBookByID(bookId));
+    }
 
+    @Override
+    public void deleteBook(Long id) {
+        libraryDao.removeBookById(id);
+        System.out.println("Done");
     }
 
 

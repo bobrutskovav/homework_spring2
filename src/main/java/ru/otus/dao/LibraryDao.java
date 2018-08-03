@@ -12,7 +12,9 @@ public interface LibraryDao {
 
     Book getBookByTitle(String title);
 
-    Book getBookByID(String id);
+    Book getBookByID(Long id);
 
     List<Genre> getAllGenres();
+
+    void removeBookById(Long id);
 }

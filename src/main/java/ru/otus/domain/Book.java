@@ -25,11 +25,11 @@ public class Book {
     private String title;
 
     @JoinColumn(name = "AUTHOR_ID")
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private Author author;
 
     @JoinColumn(name = "GENRE_ID")
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private Genre genre;
 
     @JoinColumn(name = "BOOKID")
@@ -73,6 +73,10 @@ public class Book {
 
     public List<Comment> getComment() {
         return comment;
+    }
+
+    public void setComment(List<Comment> comment) {
+        this.comment = comment;
     }
 
     @Override
