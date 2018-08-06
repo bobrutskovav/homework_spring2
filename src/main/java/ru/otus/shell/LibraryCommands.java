@@ -22,14 +22,34 @@ public class LibraryCommands {
 
     }
 
+
+    @ShellMethod(value = "Show all genres in Library", key = "showAllGenres")
+    public void printAllGenres() {
+        bookService.printAllGenres();
+
+    }
+
+    @ShellMethod(value = "Add comment to Book", key = "addComment")
+    public void addComment(@ShellOption({"-id", "--bookId"}) Long bookId,
+            @ShellOption({"-c", "--comment"}) String comment) {
+        bookService.addCommentToBook(comment, bookId);
+
+    }
+
     @ShellMethod(value = "Put new book in Library", key = "newBook")
-    public void storeNewBook(@ShellOption String title, @ShellOption String author, @ShellOption String genre) {
+    public void storeNewBook(@ShellOption({"-t", "--title"}) String title,
+            @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {
         bookService.storeNewBook(title, author, genre);
     }
 
     @ShellMethod(value = "Show book in Library by title", key = "findByTitle")
     public void showBookByTitle(@ShellOption String title) {
         bookService.printByName(title);
+    }
+
+    @ShellMethod(value = "Remove book from library with id", key = "removeBook")
+    public void removeById(@ShellOption({"-id", "--bookId"}) Long id) {
+        bookService.deleteBook(id);
     }
 
 }

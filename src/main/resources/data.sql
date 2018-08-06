@@ -1,15 +1,17 @@
-insert into books (id, title,authorid,genreid) values ('1', 'Book1','1','1');
-insert into books (id, title,authorid,genreid) values ('2', 'Book2','2','1');
-insert into books (id, title,authorid,genreid) values ('3', 'Book3','2','2');
-insert into books (id, title,authorid,genreid) values ('4', 'Book4','3','3');
+INSERT INTO BOOKS (ID, TITLE,AUTHOR_ID,GENRE_ID) VALUES (1, 'book1',1,1);
+INSERT INTO BOOKS (ID, TITLE,AUTHOR_ID,GENRE_ID) VALUES (2, 'book2',2,1);
+INSERT INTO BOOKS (ID, TITLE,AUTHOR_ID,GENRE_ID) VALUES (3, 'book3',2,2);
+INSERT INTO BOOKS (ID, TITLE,AUTHOR_ID,GENRE_ID) VALUES (4, 'book4',3,3);
 
-insert into author (id,authorname) values ('1','author1');
-insert into author (id,authorname) values ('2','author2');
-insert into author (id,authorname) values ('3','author3');
+INSERT INTO AUTHOR (ID,AUTHORNAME) VALUES (1,'author1');
+INSERT INTO AUTHOR (ID,AUTHORNAME) VALUES (2,'author2');
+INSERT INTO AUTHOR (ID,AUTHORNAME) VALUES (3,'author3');
 
 
-insert into genre (id,genretitle) values ('1','genre1');
-insert into genre (id,genretitle) values ('2','genre2');
-insert into genre (id,genretitle) values ('3','genre3');
+INSERT INTO GENRE (ID,GENRETITLE) VALUES (1,'genre1');
+INSERT INTO GENRE (ID,GENRETITLE) VALUES (2,'genre2');
+INSERT INTO GENRE (ID,GENRETITLE) VALUES (3,'genre3');
+
+INSERT INTO COMMENT (ID,BOOKID,COMMENTTEXT) VALUES (1,2,'HAHA THIS BOOK IS LOL!');
 
 
