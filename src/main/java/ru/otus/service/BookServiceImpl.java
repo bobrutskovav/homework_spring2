@@ -3,7 +3,9 @@ package ru.otus.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.dao.LibraryDao;
+import ru.otus.dao.AuthorRepository;
+import ru.otus.dao.BookRepository;
+import ru.otus.dao.GenreRepository;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
@@ -12,28 +14,35 @@ import ru.otus.domain.Genre;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final LibraryDao libraryDao;
+
+    private BookRepository bookRepository;
+    private GenreRepository genreRepository;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    public BookServiceImpl(LibraryDao libraryDao) {
-        this.libraryDao = libraryDao;
+    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository,
+            AuthorRepository authorRepository) {
+        this.bookRepository = bookRepository;
+        this.genreRepository = genreRepository;
+        this.authorRepository = authorRepository;
     }
 
 
     @Override
     public void storeNewBook(String bookName, String authorName, String genreTitle) {
-        Book newBook = new Book();
-        newBook.setTitle(bookName);
-        newBook.setAuthor(new Author(authorName));
-        newBook.setGenre(new Genre(genreTitle));
 
-        Book foundedBook = libraryDao.getBook(newBook);
+        Book foundedBook = bookRepository.findByTitleAndAuthorNameAndGenreTitle(bookName, authorName, genreTitle);
         if (foundedBook != null) {
             System.out.println("This book already here!");
             printInfoAboutBook(foundedBook);
             return;
         }
-        libraryDao.storeBook(newBook);
+        Book newBook = new Book();
+        newBook.setTitle(bookName);
+        newBook.setAuthor(new Author(authorName));
+        newBook.setGenre(new Genre(genreTitle));
+        //newBook -t tttt -a aaaaa -g ggggg
+        bookRepository.save(newBook);
         System.out.println("Book is stored");
     }
 
@@ -41,7 +50,7 @@ public class BookServiceImpl implements BookService {
     public void printAllBooks() {
         System.out.println("Here is all book we have:");
         for (Book book :
-                libraryDao.getAllBooks()) {
+                bookRepository.findAll()) {
             printInfoAboutBook(book);
         }
     }
@@ -53,7 +62,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
-        Book book = libraryDao.getBookByTitle(name);
+        Book book = bookRepository.findByTitle(name);
         if (book != null) {
             printInfoAboutBook(book);
         } else {
@@ -62,9 +71,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void printAllGenres() {
-        List<Genre> allGenres = libraryDao.getAllGenres();
+    public void printAllAuthors() {
+        authorRepository.findAll().forEach(author -> {
+            System.out.println("====Author====");
+            System.out.println(author.toString());
+        });
+    }
 
+    @Override
+    public void printAllGenres() {
+        List<Genre> allGenres = genreRepository.findAll();
         allGenres.forEach(g -> {
             System.out.println("====Genre====");
             System.out.println(g.toString());
@@ -73,19 +89,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addCommentToBook(String comment, Long bookId) {
-        Book foundedBook = libraryDao.getBookByID(bookId);
-        if (foundedBook == null) {
+        Book foundedBook = bookRepository.findById(bookId).get();
+        if (foundedBook.getTitle() == null) {
             System.out.println(String.format("Book with ID %s not found", bookId));
             return;
         }
         foundedBook.getComment().add(new Comment(bookId, comment));
-        libraryDao.storeBook(foundedBook);
-        printInfoAboutBook(libraryDao.getBookByID(bookId));
+        bookRepository.save(foundedBook);
+        printInfoAboutBook(bookRepository.findById(bookId).get());
     }
 
     @Override
     public void deleteBook(Long id) {
-        libraryDao.removeBookById(id);
+        bookRepository.deleteById(id);
         System.out.println("Done");
     }
 
