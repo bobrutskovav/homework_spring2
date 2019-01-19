@@ -36,6 +36,11 @@ public class LibraryCommands {
 
     }
 
+    @ShellMethod(value = "Show All Authors", key = "showAllAuthors")
+    public void showAllAuthors() {
+        bookService.printAllAuthors();
+    }
+
     @ShellMethod(value = "Put new book in Library", key = "newBook")
     public void storeNewBook(@ShellOption({"-t", "--title"}) String title,
             @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {

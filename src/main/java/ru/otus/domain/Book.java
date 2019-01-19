@@ -25,11 +25,11 @@ public class Book {
     private String title;
 
     @JoinColumn(name = "AUTHOR_ID")
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Author author;
 
     @JoinColumn(name = "GENRE_ID")
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Genre genre;
 
     @JoinColumn(name = "BOOKID")
