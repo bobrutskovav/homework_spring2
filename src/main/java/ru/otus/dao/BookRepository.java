@@ -1,16 +1,12 @@
 package ru.otus.dao;
 
-import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.domain.Book;
 
 
-public interface BookRepository extends CrudRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findByTitle(String title);
-
-    @Override
-    List<Book> findAll();
 
     Book findByTitleAndAuthorNameAndGenreTitle(String title, String authorName, String genreTitle);
 

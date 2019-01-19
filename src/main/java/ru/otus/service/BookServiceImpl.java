@@ -1,6 +1,5 @@
 package ru.otus.service;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.AuthorRepository;
@@ -10,6 +9,8 @@ import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
+
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -49,10 +50,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void printAllBooks() {
         System.out.println("Here is all book we have:");
-        for (Book book :
-                bookRepository.findAll()) {
-            printInfoAboutBook(book);
-        }
+        bookRepository.findAll().forEach(this::printInfoAboutBook);
     }
 
     @Override
@@ -83,7 +81,7 @@ public class BookServiceImpl implements BookService {
         List<Genre> allGenres = genreRepository.findAll();
         allGenres.forEach(g -> {
             System.out.println("====Genre====");
-            System.out.println(g.toString());
+            System.out.println(g);
         });
     }
 

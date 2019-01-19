@@ -1,11 +1,8 @@
 package ru.otus.dao;
 
-import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.domain.Author;
 
-public interface AuthorRepository extends CrudRepository<Author, Long> {
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    @Override
-    List<Author> findAll();
 }
