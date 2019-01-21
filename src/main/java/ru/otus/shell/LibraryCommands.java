@@ -30,9 +30,9 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Add comment to Book", key = "addComment")
-    public void addComment(@ShellOption({"-id", "--bookId"}) Long bookId,
-            @ShellOption({"-c", "--comment"}) String comment) {
-        bookService.addCommentToBook(comment, bookId);
+    public void addComment(@ShellOption({"-t", "--title"}) String bookTitle,
+                           @ShellOption({"-c", "--comment"}) String comment) {
+        bookService.addCommentToBook(comment, bookTitle);
 
     }
 
@@ -43,7 +43,7 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Put new book in Library", key = "newBook")
     public void storeNewBook(@ShellOption({"-t", "--title"}) String title,
-            @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {
+                             @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {
         bookService.storeNewBook(title, author, genre);
     }
 
@@ -52,9 +52,14 @@ public class LibraryCommands {
         bookService.printByName(title);
     }
 
-    @ShellMethod(value = "Remove book from library with id", key = "removeBook")
-    public void removeById(@ShellOption({"-id", "--bookId"}) Long id) {
-        bookService.deleteBook(id);
+    @ShellMethod(value = "Remove book from library with Title", key = "removeBook")
+    public void removeByTitle(@ShellOption({"-t", "--title"}) String title) {
+        bookService.deleteBook(title);
+    }
+
+    @ShellMethod(value = "Prints all Comments", key = "showAllComments")
+    public void showAllComments() {
+        bookService.printAllComments();
     }
 
 }
