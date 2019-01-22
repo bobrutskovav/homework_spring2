@@ -4,6 +4,8 @@ public interface BookService {
 
      void storeNewBook(String bookName, String authorName, String genreTitle);
      void printAllBooks();
+
+     void printAllComments();
      void printAllByGenre(String genre);
      void printByName(String name);
 
@@ -11,7 +13,7 @@ public interface BookService {
 
      void printAllGenres();
 
-     void addCommentToBook(String comment, Long bookId);
+     void addCommentToBook(String comment, String title);
 
-     void deleteBook(Long id);
+     void deleteBook(String title);
 }
