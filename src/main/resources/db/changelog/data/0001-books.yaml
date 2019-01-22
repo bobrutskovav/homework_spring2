@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-books
+      author: bobrutskovav
+      changes:
+        - sqlFile:
+            dbms: h2
+            encoding: utf8
+            endDelimiter: \nGO
+            path: /booksdata.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true

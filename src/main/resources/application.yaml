@@ -1,6 +1,8 @@
 spring:
  datasource:
    initialization-mode: always
+   h2.console.enabled: true
+   liquibase.enabled: true
  jpa:
    hibernate:
     ddl-auto: none
