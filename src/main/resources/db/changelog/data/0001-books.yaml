@@ -7,7 +7,7 @@ databaseChangeLog:
             dbms: h2
             encoding: utf8
             endDelimiter: \nGO
-            path: /booksdata.sql
+            path: ../sql/booksdata.sql
             relativeToChangelogFile: true
             splitStatements: true
             stripComments: true
