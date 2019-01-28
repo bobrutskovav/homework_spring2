@@ -23,7 +23,7 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Genre genre;
 
-    @JoinColumn(name = "ENTITY_ID")
+    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Comment> comment;
 

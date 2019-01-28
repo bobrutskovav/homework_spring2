@@ -36,12 +36,13 @@ INSERT INTO BOOKS (TITLE, AUTHOR_ID, GENRE_ID) VALUES ('book4', (SELECT ID
                                                                                                           GENRE.GENRETITLE
                                                                                                           = 'genre3'));
 
-INSERT INTO COMMENT (ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
-                                                      FROM BOOKS
+INSERT INTO COMMENT (COMMENT_FOR_ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
+                                                                  FROM BOOKS
                                                       WHERE BOOKS.TITLE = 'book2'), 'HAHA THIS BOOK IS LOL!');
-INSERT INTO COMMENT (ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
-                                                      FROM AUTHOR
-                                                      WHERE AUTHOR.AUTHORNAME = 'author1'), 'THIS BOOK IS SHIT!');
+INSERT INTO COMMENT (COMMENT_FOR_ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
+                                                                  FROM AUTHOR
+                                                                  WHERE AUTHOR.AUTHORNAME = 'author1'),
+                                                                 'THIS AUTHOR IS SHIT!');
 
 
 

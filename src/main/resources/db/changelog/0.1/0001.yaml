@@ -70,7 +70,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: pk_comment
               - column:
-                  name: entity_id
+                  name: comment_for_entity_id
                   type: uuid
                   constraints:
                     nullable: false

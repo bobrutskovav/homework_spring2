@@ -16,7 +16,7 @@ public class Author {
     @Column(name = "AUTHORNAME")
     private String name;
 
-    @JoinColumn(name = "ENTITY_ID")
+    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Comment> comment;
 

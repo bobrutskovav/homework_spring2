@@ -1,7 +1,5 @@
 package ru.otus.service;
 
-import java.util.List;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.AuthorRepository;
@@ -13,9 +11,11 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class BookServiceImpl implements BookService {
-
 
     @Autowired
     private BookRepository bookRepository;
@@ -25,7 +25,6 @@ public class BookServiceImpl implements BookService {
     private AuthorRepository authorRepository;
     @Autowired
     private CommentRepository commentRepository;
-
 
 
     @Override
@@ -103,7 +102,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(String title) {
-        bookRepository.deleteBookByTitle(title);
+
+        Book foundBook = bookRepository.findByTitle(title);
+        System.out.println("Found book :\n" + foundBook);
+        bookRepository.delete(foundBook);
         System.out.println("Done");
     }
 

@@ -12,14 +12,14 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "ENTITY_ID", updatable = false, nullable = false)
-    private UUID entity_id;
+    @Column(name = "COMMENT_FOR_ENTITY_ID", updatable = false, nullable = false)
+    private UUID commentForEntityId;
     @Column(name = "COMMENTTEXT")
     private String text;
 
 
-    public Comment(UUID entity_id, String text) {
-        this.entity_id = entity_id;
+    public Comment(UUID commentForEntityId, String text) {
+        this.commentForEntityId = commentForEntityId;
         this.text = text;
     }
 
@@ -34,12 +34,12 @@ public class Comment {
         this.id = id;
     }
 
-    public UUID getEntity_id() {
-        return entity_id;
+    public UUID getCommentForEntityId() {
+        return commentForEntityId;
     }
 
-    public void setEntity_id(UUID entity_id) {
-        this.entity_id = entity_id;
+    public void setCommentForEntityId(UUID commentForEntityId) {
+        this.commentForEntityId = commentForEntityId;
     }
 
     public String getText() {
@@ -54,7 +54,7 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", entity_id=" + entity_id +
+                ", commentForEntityId=" + commentForEntityId +
                 ", text='" + text + '\'' +
                 '}';
     }
