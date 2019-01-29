@@ -1,11 +1,7 @@
 package ru.otus.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "COMMENT")
@@ -13,37 +9,37 @@ public class Comment {
 
     @Id
     @Column(name = "ID", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(name = "BOOKID", updatable = false, nullable = false)
-    private Long bookId;
+    @Column(name = "COMMENT_FOR_ENTITY_ID", updatable = false, nullable = false)
+    private UUID commentForEntityId;
     @Column(name = "COMMENTTEXT")
     private String text;
 
 
-    public Comment(Long bookId, String text) {
-        this.bookId = bookId;
+    public Comment(UUID commentForEntityId, String text) {
+        this.commentForEntityId = commentForEntityId;
         this.text = text;
     }
 
     public Comment() {
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Long getBookId() {
-        return bookId;
+    public UUID getCommentForEntityId() {
+        return commentForEntityId;
     }
 
-    public void setBookId(Long bookId) {
-        this.bookId = bookId;
+    public void setCommentForEntityId(UUID commentForEntityId) {
+        this.commentForEntityId = commentForEntityId;
     }
 
     public String getText() {
@@ -52,5 +48,14 @@ public class Comment {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", commentForEntityId=" + commentForEntityId +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

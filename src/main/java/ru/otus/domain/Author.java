@@ -1,11 +1,8 @@
 package ru.otus.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "AUTHOR")
@@ -14,10 +11,14 @@ public class Author {
     @Id
     @Column(name = "ID", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(name = "AUTHORNAME")
     private String name;
+
+    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private List<Comment> comment;
 
     public Author(String name) {
         this.name = name;
@@ -27,11 +28,11 @@ public class Author {
     public Author() {
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -49,6 +50,7 @@ public class Author {
         return "Author{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", comment=" + comment +
                 '}';
     }
 }

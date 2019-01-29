@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.AuthorRepository;
 import ru.otus.dao.BookRepository;
+import ru.otus.dao.CommentRepository;
 import ru.otus.dao.GenreRepository;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
@@ -11,22 +12,19 @@ import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class BookServiceImpl implements BookService {
 
-
-    private BookRepository bookRepository;
-    private GenreRepository genreRepository;
-    private AuthorRepository authorRepository;
-
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository,
-            AuthorRepository authorRepository) {
-        this.bookRepository = bookRepository;
-        this.genreRepository = genreRepository;
-        this.authorRepository = authorRepository;
-    }
+    private BookRepository bookRepository;
+    @Autowired
+    private GenreRepository genreRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
 
     @Override
@@ -85,21 +83,29 @@ public class BookServiceImpl implements BookService {
         });
     }
 
-    @Override
-    public void addCommentToBook(String comment, Long bookId) {
-        Book foundedBook = bookRepository.findById(bookId).get();
-        if (foundedBook.getTitle() == null) {
-            System.out.println(String.format("Book with ID %s not found", bookId));
-            return;
-        }
-        foundedBook.getComment().add(new Comment(bookId, comment));
-        bookRepository.save(foundedBook);
-        printInfoAboutBook(bookRepository.findById(bookId).get());
+    public void printAllComments() {
+        commentRepository.findAll().forEach(System.out::println);
     }
 
     @Override
-    public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+    public void addCommentToBook(String comment, String title) {
+        Book foundedBook = bookRepository.findByTitle(title);
+        if (foundedBook.getTitle() == null) {
+            System.out.println(String.format("Book with Title %s not found", title));
+            return;
+        }
+        UUID idOFoundedBook = foundedBook.getId();
+        foundedBook.getComment().add(new Comment(idOFoundedBook, comment));
+        bookRepository.save(foundedBook);
+        printInfoAboutBook(bookRepository.findById(idOFoundedBook).orElse(null));
+    }
+
+    @Override
+    public void deleteBook(String title) {
+
+        Book foundBook = bookRepository.findByTitle(title);
+        System.out.println("Found book :\n" + foundBook);
+        bookRepository.delete(foundBook);
         System.out.println("Done");
     }
 
