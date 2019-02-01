@@ -1,18 +1,11 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
-import java.util.UUID;
+import java.util.List;
 
-@Entity
-@Table(name = "GENRE")
 public class Genre {
 
-    @Id
-    @Column(name = "ID", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
-    @Column(name = "GENRETITLE")
     private String title;
+    private List<Comment> comment;
 
     public Genre(String genreTitle) {
         this.title = genreTitle;
@@ -21,13 +14,6 @@ public class Genre {
     public Genre() {
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -40,7 +26,6 @@ public class Genre {
     @Override
     public String toString() {
         return "Genre{" +
-                "id=" + id +
                 ", title='" + title + '\'' +
                 '}';
     }

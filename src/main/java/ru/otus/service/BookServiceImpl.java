@@ -1,8 +1,9 @@
 package ru.otus.service;
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.dao.AuthorRepository;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.CommentRepository;
 import ru.otus.dao.GenreRepository;
@@ -10,9 +11,6 @@ import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class BookServiceImpl implements BookService {

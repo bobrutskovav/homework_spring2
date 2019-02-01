@@ -1,30 +1,19 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Entity
-@Table(name = "BOOKS")
+@Document
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", updatable = false, nullable = false)
     private UUID id;
     private String title;
-
-    @JoinColumn(name = "AUTHOR_ID")
-    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Author author;
-
-    @JoinColumn(name = "GENRE_ID")
-    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Genre genre;
-
-    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<Comment> comment;
 
     public UUID getId() {

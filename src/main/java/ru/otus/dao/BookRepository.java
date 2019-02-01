@@ -1,12 +1,11 @@
 package ru.otus.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.otus.domain.Book;
 
-import java.util.UUID;
 
-
-public interface BookRepository extends JpaRepository<Book, UUID> {
+public interface BookRepository extends MongoRepository<Book, UUID> {
 
     Book findByTitle(String title);
 

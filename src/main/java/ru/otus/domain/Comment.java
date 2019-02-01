@@ -1,20 +1,17 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
-import java.util.UUID;
 
-@Entity
-@Table(name = "COMMENT")
+import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+
 public class Comment {
 
     @Id
-    @Column(name = "ID", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(name = "COMMENT_FOR_ENTITY_ID", updatable = false, nullable = false)
     private UUID commentForEntityId;
-    @Column(name = "COMMENTTEXT")
     private String text;
 
 
