@@ -2,18 +2,21 @@ package ru.otus.service;
 
 public interface BookService {
 
-     void storeNewBook(String bookName, String authorName, String genreTitle);
-     void printAllBooks();
+    void storeNewBook(String bookName, String authorName, String genreTitle);
 
-     void printAllComments();
-     void printAllByGenre(String genre);
-     void printByName(String name);
+    void printAllBooks();
 
-     void printAllAuthors();
+    void printAllComments();
 
-     void printAllGenres();
+    void printAllByGenre(String genre);
 
-     void addCommentToBook(String comment, String title);
+    void printByName(String name);
 
-     void deleteBook(String title);
+    void printAllAuthors();
+
+    void printAllGenres();
+
+    void addCommentToBook(String comment, String title);
+
+    void deleteBook(String title);
 }

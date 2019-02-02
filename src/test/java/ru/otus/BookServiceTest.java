@@ -1,10 +1,6 @@
 package ru.otus;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,12 +14,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.CommentRepository;
-import ru.otus.dao.GenreRepository;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.service.BookService;
 import ru.otus.service.BookServiceImpl;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 public class BookServiceTest {
@@ -37,11 +37,6 @@ public class BookServiceTest {
     @MockBean
     private BookRepository bookRepository;
 
-    @MockBean
-    private GenreRepository genreRepository;
-
-    @MockBean
-    private AuthorRepository authorRepository;
 
     @MockBean
     private CommentRepository commentRepository;
@@ -56,7 +51,7 @@ public class BookServiceTest {
         Book book = new Book();
         book.setGenre(new Genre(GENRE));
         book.setAuthor(new Author(AUTHOR));
-        book.setComment(new ArrayList<>());
+        book.setComments(new ArrayList<>());
         book.setTitle(TITLE);
         Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(book);
         baos = new ByteArrayOutputStream();

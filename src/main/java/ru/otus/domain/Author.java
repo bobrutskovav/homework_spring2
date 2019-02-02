@@ -1,17 +1,14 @@
 package ru.otus.domain;
 
 import java.util.List;
-import java.util.UUID;
-import org.springframework.data.annotation.Id;
-
 
 
 public class Author {
 
-    @Id
-    private UUID id;
+
     private String name;
-    private List<Comment> comment;
+
+    private List<Comment> comments;
 
     public Author(String name) {
         this.name = name;
@@ -19,14 +16,6 @@ public class Author {
 
 
     public Author() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -37,13 +26,19 @@ public class Author {
         this.name = name;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Override
     public String toString() {
         return "Author{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", comment=" + comment +
+                "name='" + name + '\'' +
+                ", comments=" + comments +
                 '}';
     }
 }

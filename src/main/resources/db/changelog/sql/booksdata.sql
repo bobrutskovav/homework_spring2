@@ -38,7 +38,8 @@ INSERT INTO BOOKS (TITLE, AUTHOR_ID, GENRE_ID) VALUES ('book4', (SELECT ID
 
 INSERT INTO COMMENT (COMMENT_FOR_ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
                                                                   FROM BOOKS
-                                                      WHERE BOOKS.TITLE = 'book2'), 'HAHA THIS BOOK IS LOL!');
+                                                                  WHERE BOOKS.TITLE = 'book2'),
+                                                                 'HAHA THIS BOOK IS LOL!');
 INSERT INTO COMMENT (COMMENT_FOR_ENTITY_ID, COMMENTTEXT) VALUES ((SELECT ID
                                                                   FROM AUTHOR
                                                                   WHERE AUTHOR.AUTHORNAME = 'author1'),

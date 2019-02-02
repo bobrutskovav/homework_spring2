@@ -1,26 +1,23 @@
 package ru.otus.service;
 
-import java.util.List;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.CommentRepository;
-import ru.otus.dao.GenreRepository;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private GenreRepository genreRepository;
-    @Autowired
-    private AuthorRepository authorRepository;
+
     @Autowired
     private CommentRepository commentRepository;
 
@@ -38,6 +35,7 @@ public class BookServiceImpl implements BookService {
         newBook.setTitle(bookName);
         newBook.setAuthor(new Author(authorName));
         newBook.setGenre(new Genre(genreTitle));
+        newBook.setComments(new ArrayList<>());
         //newBook -t tttt -a aaaaa -g ggggg
         bookRepository.save(newBook);
         System.out.println("Book is stored");
@@ -66,19 +64,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printAllAuthors() {
-        authorRepository.findAll().forEach(author -> {
+        bookRepository.findByAuthorIsNotNull().forEach(b -> {
             System.out.println("====Author====");
-            System.out.println(author.toString());
+            System.out.println(b.getAuthor());
         });
     }
 
     @Override
     public void printAllGenres() {
-        List<Genre> allGenres = genreRepository.findAll();
-        allGenres.forEach(g -> {
-            System.out.println("====Genre====");
-            System.out.println(g);
-        });
+//        List<Genre> allGenres = genreRepository.findAll();
+//        allGenres.forEach(g -> {
+//            System.out.println("====Genre====");
+//            System.out.println(g);
+//        });
     }
 
     public void printAllComments() {
@@ -92,8 +90,13 @@ public class BookServiceImpl implements BookService {
             System.out.println(String.format("Book with Title %s not found", title));
             return;
         }
-        UUID idOFoundedBook = foundedBook.getId();
-        foundedBook.getComment().add(new Comment(idOFoundedBook, comment));
+        String idOFoundedBook = foundedBook.getId();
+        List<Comment> currentComments = foundedBook.getComments();
+        if (currentComments == null) {
+            currentComments = new ArrayList<>();
+            foundedBook.setComments(currentComments);
+        }
+        currentComments.add(new Comment(comment));
         bookRepository.save(foundedBook);
         printInfoAboutBook(bookRepository.findById(idOFoundedBook).orElse(null));
     }
@@ -114,6 +117,7 @@ public class BookServiceImpl implements BookService {
         System.out.println("Title: " + book.getTitle());
         System.out.println("Author: " + book.getAuthor().getName());
         System.out.println("Genre: " + book.getGenre().getTitle());
-        book.getComment().forEach(c -> System.out.println("\nComment :" + c.getText()));
+        List<Comment> comments = book.getComments();
+        if (comments != null) comments.forEach(c -> System.out.println("\nComment :" + c.getText()));
     }
 }

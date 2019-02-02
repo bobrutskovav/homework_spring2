@@ -1,30 +1,31 @@
 package ru.otus.domain;
 
-import java.util.List;
-import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 
 @Document
 public class Book {
 
     @Id
-    private UUID id;
+    private String id;
     private String title;
     private Author author;
     private Genre genre;
-    private List<Comment> comment;
 
-    public UUID getId() {
+    private List<Comment> comments;
+
+    public Book() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public Book() {
     }
 
     public String getTitle() {
@@ -51,21 +52,22 @@ public class Book {
         this.genre = genre;
     }
 
-    public List<Comment> getComment() {
-        return comment;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setComment(List<Comment> comment) {
-        this.comment = comment;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
+                ", author=" + author +
+                ", genre=" + genre +
+                ", comments=" + comments +
                 '}';
     }
 }
