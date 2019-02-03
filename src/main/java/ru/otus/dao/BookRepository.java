@@ -16,4 +16,7 @@ public interface BookRepository extends MongoRepository<Book, String> {
     @Query
     List<Book> findByAuthorIsNotNull();
 
+    @Query
+    List<Book> findByGenreIsNotNull();
+
 }

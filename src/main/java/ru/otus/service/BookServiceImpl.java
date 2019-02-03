@@ -72,11 +72,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printAllGenres() {
-//        List<Genre> allGenres = genreRepository.findAll();
-//        allGenres.forEach(g -> {
-//            System.out.println("====Genre====");
-//            System.out.println(g);
-//        });
+        List<Book> allGenres = bookRepository.findByGenreIsNotNull();
+        allGenres.forEach(g -> {
+            System.out.println("====Genre====");
+            System.out.println(g.getGenre().getTitle());
+        });
     }
 
     public void printAllComments() {
