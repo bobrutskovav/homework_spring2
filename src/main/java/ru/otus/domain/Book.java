@@ -1,41 +1,31 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Entity
-@Table(name = "BOOKS")
+@Document
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", updatable = false, nullable = false)
-    private UUID id;
+    private String id;
     private String title;
-
-    @JoinColumn(name = "AUTHOR_ID")
-    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Author author;
-
-    @JoinColumn(name = "GENRE_ID")
-    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Genre genre;
 
-    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private List<Comment> comment;
+    private List<Comment> comments = new ArrayList<>();
 
-    public UUID getId() {
+    public Book() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public Book() {
     }
 
     public String getTitle() {
@@ -62,21 +52,22 @@ public class Book {
         this.genre = genre;
     }
 
-    public List<Comment> getComment() {
-        return comment;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setComment(List<Comment> comment) {
-        this.comment = comment;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", genre='" + genre + '\'' +
+                ", author=" + author +
+                ", genre=" + genre +
+                ", comments=" + comments +
                 '}';
     }
 }

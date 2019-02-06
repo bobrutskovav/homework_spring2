@@ -1,9 +1,9 @@
 package ru.otus.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import ru.otus.domain.Comment;
 
-import java.util.UUID;
-
-public interface CommentRepository extends JpaRepository<Comment, UUID> {
+@Repository
+public interface CommentRepository extends MongoRepository<Comment, String> {
 }

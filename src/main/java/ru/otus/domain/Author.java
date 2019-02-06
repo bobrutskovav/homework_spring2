@@ -1,24 +1,15 @@
 package ru.otus.domain;
 
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Entity
-@Table(name = "AUTHOR")
+
 public class Author {
 
-    @Id
-    @Column(name = "ID", updatable = false, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
 
-    @Column(name = "AUTHORNAME")
     private String name;
 
-    @JoinColumn(name = "COMMENT_FOR_ENTITY_ID")
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private List<Comment> comment;
+    private List<Comment> comments = new ArrayList<>();
 
     public Author(String name) {
         this.name = name;
@@ -26,14 +17,6 @@ public class Author {
 
 
     public Author() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -44,13 +27,19 @@ public class Author {
         this.name = name;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Override
     public String toString() {
         return "Author{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", comment=" + comment +
+                "name='" + name + '\'' +
+                ", comments=" + comments +
                 '}';
     }
 }
