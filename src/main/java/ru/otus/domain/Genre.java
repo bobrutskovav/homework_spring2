@@ -1,12 +1,13 @@
 package ru.otus.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Genre {
 
     private String title;
 
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Genre(String genreTitle) {
         this.title = genreTitle;

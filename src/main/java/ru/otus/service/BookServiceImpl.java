@@ -1,5 +1,7 @@
 package ru.otus.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookRepository;
@@ -8,9 +10,6 @@ import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -92,10 +91,6 @@ public class BookServiceImpl implements BookService {
         }
         String idOFoundedBook = foundedBook.getId();
         List<Comment> currentComments = foundedBook.getComments();
-        if (currentComments == null) {
-            currentComments = new ArrayList<>();
-            foundedBook.setComments(currentComments);
-        }
         currentComments.add(new Comment(comment));
         bookRepository.save(foundedBook);
         printInfoAboutBook(bookRepository.findById(idOFoundedBook).orElse(null));
@@ -117,7 +112,6 @@ public class BookServiceImpl implements BookService {
         System.out.println("Title: " + book.getTitle());
         System.out.println("Author: " + book.getAuthor().getName());
         System.out.println("Genre: " + book.getGenre().getTitle());
-        List<Comment> comments = book.getComments();
-        if (comments != null) comments.forEach(c -> System.out.println("\nComment :" + c.getText()));
+        book.getComments().forEach(c -> System.out.println("\nComment :" + c.getText()));
     }
 }

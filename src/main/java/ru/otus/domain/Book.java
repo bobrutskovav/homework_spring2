@@ -1,9 +1,9 @@
 package ru.otus.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 
 @Document
@@ -15,7 +15,7 @@ public class Book {
     private Author author;
     private Genre genre;
 
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Book() {
     }

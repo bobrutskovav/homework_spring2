@@ -1,5 +1,6 @@
 package ru.otus.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -8,7 +9,7 @@ public class Author {
 
     private String name;
 
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Author(String name) {
         this.name = name;
