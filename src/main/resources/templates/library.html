@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Library</title>
 </head>
 <body>
+
+<h3>Welcome to best Library in the Hello World!</h3>
+
+<h5 th:if="${allBooks.size()!=0}">Our Books</h5>
+<h5 th:unless="${allBooks.size()!=0}">Sorry, right now we don't have a books!</h5>
+
+<div class="book-box" th:if="${allBooks.size()!=0}">
+    <table class="books">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Author</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${allBooks}">
+            <td th:text="${book.id}">1</td>
+            <td th:text="${book.title}">John Doe</td>
+            <td th:text="${book.genre}">Horror</td>
+            <td th:text="${book.author}">Anonymous</td>
+            <td>
+                <a th:href="@{/edit(id=${book.id})}" href="edit.html">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<button th:onclick="'window.location.href=\'/newbook\''">Add new Book!</button>
+
 
 </body>
 </html>
