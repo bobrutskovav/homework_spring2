@@ -27,4 +27,9 @@ public class BookController {
         model.addAttribute("allBooks", bookRepository.findAll());
         return "library";
     }
+
+    @GetMapping("/library/newbook")
+    public String newBookPage(Model model) {
+        return "newBook";
+    }
 }
