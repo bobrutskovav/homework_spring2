@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public class Main {
 
     public static void main(String[] args) {
+        //Todo Добавить отображение комментариев / добавление комментариев
+        //Todo Добавить стили (Bootstrap?)
+        //ToDo Добавить тесты MockMvc
         SpringApplication.run(Main.class);
 
     }
