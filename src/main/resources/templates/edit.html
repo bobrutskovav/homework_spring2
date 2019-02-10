@@ -2,18 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Library - Add New Book</title>
+    <title th:text="${bookForEdit.title}"></title>
 </head>
 <body>
 
 
-<h3>Please, add info about book here:</h3>
-<form th:action="@{/library/newbook}" th:object="${book}" method="post">
-
+<form th:action="@{/library/edit}" th:object="${bookForEdit}" method="post">
+    <input th:field="*{id}" type="hidden">
     <p>Title <input type="text" th:field="*{title}" th:required="required"></p>
     <p>Author <input th:field="*{author.name}" type="text" th:required="required"></p>
     <p>Genre <input th:field="*{genre.title}" type="text" th:required="required"></p>
-    <button type="submit">Add this book</button>
-</form>
+    <button type="submit">Edit this book</button>
+
 </body>
 </html>
