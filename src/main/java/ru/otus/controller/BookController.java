@@ -1,7 +1,6 @@
 package ru.otus.controller;
 
 
-import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +12,8 @@ import ru.otus.dao.BookRepository;
 import ru.otus.domain.Book;
 import ru.otus.domain.BookNotFoundException;
 import ru.otus.service.BookService;
+
+import java.util.Collections;
 
 @Controller
 public class BookController {
@@ -62,9 +63,9 @@ public class BookController {
 
     }
 
-    @GetMapping("/library/search")
-    public String searchBook(@RequestParam("titleForSearch") String title, Model model) {
-        Book book = bookRepository.findByTitle(title).orElseThrow(BookNotFoundException::new);
+    @PostMapping("/library/search")
+    public String searchBook(@RequestParam(name = "titleForSearch") String titleForSearch, Model model) {
+        Book book = bookRepository.findByTitle(titleForSearch).orElseThrow(BookNotFoundException::new);
         model.addAttribute("allBooks", Collections.singletonList(book));
         return "library";
     }
