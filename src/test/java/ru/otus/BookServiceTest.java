@@ -1,6 +1,11 @@
 package ru.otus;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,11 +24,6 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 import ru.otus.service.BookService;
 import ru.otus.service.BookServiceImpl;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 public class BookServiceTest {
@@ -53,7 +53,7 @@ public class BookServiceTest {
         book.setAuthor(new Author(AUTHOR));
         book.setComments(new ArrayList<>());
         book.setTitle(TITLE);
-        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(book);
+        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(Optional.of(book));
         baos = new ByteArrayOutputStream();
         ps = new PrintStream(baos);
         System.setOut(ps);

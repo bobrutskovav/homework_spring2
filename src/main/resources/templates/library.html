@@ -11,6 +11,13 @@
 <h5 th:if="${not #lists.isEmpty(allBooks)}">Our Books</h5>
 <h5 th:if="${#lists.isEmpty(allBooks)}">Sorry, right now we don't have a books!</h5>
 
+
+<div>
+    <form th:action="@{/library/search(${titleForSearch})}" method="get">
+        <label>Search</label>
+        <input type="submit" th:field="titleForSearch">
+    </form>
+</div>
 <div class="book-box" th:if="${not #lists.isEmpty(allBooks)}">
     <table class="books">
         <thead>
@@ -22,9 +29,25 @@
         </thead>
         <tbody>
         <tr th:each="book : ${allBooks}">
-            <td th:text="${book.title}">John Doe</td>
-            <td th:text="${book.genre.title}">Horror</td>
-            <td th:text="${book.author.name}">Anonymous</td>
+            <td th:text="${book.title}">John Doe
+                <div th:if="${not #lists.isEmpty(book.comments)}">
+                    <span th:each="bookComment : ${book.comments}" th:text="${bookComment.text}">CommentToBook
+                    </span>
+                </div>
+            </td>
+            <td th:text="${book.genre.title}">Horror
+                <div th:if="${not #lists.isEmpty(book.genre.comments)}">
+                    <span th:each="genreComment : ${book.genre.comments}" th:text="${genreComment.text}"> CommentToGenre
+                    </span>
+                </div>
+            </td>
+
+            <td th:text="${book.author.name}">Anonymous
+                <div th:if="${not #lists.isEmpty(book.author.comments)}">
+                    <span th:each="authorComment : ${book.author.comments}" th:text="${authorComment.text}">CommentToAuthor
+                    </span>
+                </div>
+            </td>
             <td>
                 <a th:href="@{/library/edit(id=${book.id})}" href="edit.html">Edit</a>
             </td>

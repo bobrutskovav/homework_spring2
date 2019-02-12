@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
-        Book book = bookRepository.findByTitle(name);
+        Book book = bookRepository.findByTitle(name).orElse(null);
         if (book != null) {
             printInfoAboutBook(book);
         } else {
@@ -84,7 +84,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addCommentToBook(String comment, String title) {
-        Book foundedBook = bookRepository.findByTitle(title);
+        Book foundedBook = bookRepository.findByTitle(title).orElse(null);
         if (foundedBook.getTitle() == null) {
             System.out.println(String.format("Book with Title %s not found", title));
             return;
@@ -99,7 +99,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(String title) {
 
-        Book foundBook = bookRepository.findByTitle(title);
+        Book foundBook = bookRepository.findByTitle(title).orElse(null);
         System.out.println("Found book :\n" + foundBook);
         bookRepository.delete(foundBook);
         System.out.println("Done");
@@ -114,4 +114,6 @@ public class BookServiceImpl implements BookService {
         System.out.println("Genre: " + book.getGenre().getTitle());
         book.getComments().forEach(c -> System.out.println("\nComment :" + c.getText()));
     }
+
+
 }

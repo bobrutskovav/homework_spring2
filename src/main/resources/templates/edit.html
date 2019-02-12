@@ -7,11 +7,10 @@
 <body>
 
 
-<form th:action="@{/library/edit}" th:object="${bookForEdit}" method="post">
-    <input th:field="*{id}" type="hidden">
-    <p>Title <input type="text" th:field="*{title}" th:required="required"></p>
-    <p>Author <input th:field="*{author.name}" type="text" th:required="required"></p>
-    <p>Genre <input th:field="*{genre.title}" type="text" th:required="required"></p>
+<form th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}" method="post">
+    <label>Title <input type="text" th:field="*{title}" th:required="required"></label>
+    <label>Author <input th:field="*{author.name}" type="text" th:required="required"></label>
+    <label>Genre <input th:field="*{genre.title}" type="text" th:required="required"></label>
     <button type="submit">Edit this book</button>
 
 </body>

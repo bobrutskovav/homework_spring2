@@ -1,6 +1,7 @@
 package ru.otus.controller;
 
 
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,8 +48,8 @@ public class BookController {
     }
 
     @GetMapping("/library/edit")
-    public String editPage(@RequestParam("id") String id, Model model) throws BookNotFoundException {
-        Book bookForEdit = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException());
+    public String editPage(@RequestParam("id") String id, Model model) {
+        Book bookForEdit = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         model.addAttribute("bookForEdit", bookForEdit);
         return "edit";
     }
@@ -59,5 +60,12 @@ public class BookController {
         model.addAttribute("allBooks", bookRepository.findAll());
         return "library";
 
+    }
+
+    @GetMapping("/library/search")
+    public String searchBook(@RequestParam("titleForSearch") String title, Model model) {
+        Book book = bookRepository.findByTitle(title).orElseThrow(BookNotFoundException::new);
+        model.addAttribute("allBooks", Collections.singletonList(book));
+        return "library";
     }
 }
