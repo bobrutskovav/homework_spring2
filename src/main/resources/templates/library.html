@@ -3,69 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/costil.css">
+
 </head>
 <body>
+<div id="particles-js">
+    <div class="row">
+        <div class="col-md-4" id="center-div">
+            <h3>Welcome to best Library in the Hello World!</h3>
 
-<h3>Welcome to best Library in the Hello World!</h3>
-
-<h5 th:if="${not #lists.isEmpty(allBooks)}">Our Books</h5>
-<h5 th:if="${#lists.isEmpty(allBooks)}">Sorry, right now we don't have a books!</h5>
+            <h5 th:if="${not #lists.isEmpty(allBooks)}">Our Books</h5>
+            <h5 th:if="${#lists.isEmpty(allBooks)}">Sorry, right now we don't have a books!</h5>
 
 
-<div th:if="${not #lists.isEmpty(allBooks)}">
-    <form th:action="@{/library/search}" method="post">
-        <label>Search</label>
-        <input type="text" name="titleForSearch">
-        <button type="submit">Search</button>
-    </form>
-</div>
-<div class="book-box" th:if="${not #lists.isEmpty(allBooks)}">
-    <table class="books">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Author</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book : ${allBooks}">
-            <td th:text="${book.title}">John Doe
-            </td>
-            <td th:text="${book.genre.title}">Horror
-                <div th:if="${not #lists.isEmpty(book.genre.comments)}">
-                    <th:block th:each="genreComment : ${book.genre.comments}">
-                        <span th:text="${genreComment.text}"> CommentToGenre
-                        </span>
-                    </th:block>
+            <div th:if="${not #lists.isEmpty(allBooks)}">
 
-                </div>
-            </td>
+                <form th:action="@{/library/search}" method="post">
+                    <div class="form-group">
+                        <label for="searchInput">Search</label>
+                        <input id="searchInput" class="form-control" type="text" name="titleForSearch"
+                               placeholder="Enter title here">
+                        <button type="submit" class="btn btn-primary mt-3">Search</button>
+                    </div>
+                </form>
 
-            <td th:text="${book.author.name}">Anonymous
-                <div th:if="${not #lists.isEmpty(book.author.comments)}">
-                    <th:block th:each="authorComment : ${book.author.comments}">
-                        <span th:text="${authorComment.text}">CommentToAuthor
-                    </span>
-                    </th:block>
 
-                </div>
-            </td>
-            <td>
-                <a th:href="@{/library/edit(id=${book.id})}" href="edit.html">Edit</a>
-            </td>
-            <td th:if="${not #lists.isEmpty(book.comments)}">Comments
-                <th:block th:each="bookComment : ${book.comments}">
+            </div>
+            <div class="book-box" th:if="${not #lists.isEmpty(allBooks)}">
+                <table class="books table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="book : ${allBooks}">
+                        <td th:text="${book.title}">John Doe
+                        </td>
+                        <td th:text="${book.genre.title}">Horror
+                        </td>
+
+                        <td th:text="${book.author.name}">Anonymous
+                        </td>
+                        <td>
+                            <a th:href="@{/library/edit(id=${book.id})}" href="edit.html">Edit</a>
+                        </td>
+                        <td th:if="${not #lists.isEmpty(book.comments)}">Comments
+                            <th:block th:each="bookComment : ${book.comments}">
                          <span th:text="${bookComment.text}">CommentToBook
                     </span>
-                </th:block>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                            </th:block>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button th:onclick="'window.location.href=\'/library/newbook\''" class="btn btn-secondary mt-3">Add new
+                Book!
+            </button>
+        </div>
+    </div>
 </div>
-<button th:onclick="'window.location.href=\'/library/newbook\''">Add new Book!</button>
-
 
 </body>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
+<script src="../static/costil.js"></script>
 </html>
