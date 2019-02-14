@@ -9,6 +9,7 @@
 <body>
 <div id="particles-js">
     <div class="col-md-4" id="center-div">
+        <h3>Please, edit info about book here:</h3>
         <form th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}" method="post">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -26,5 +27,5 @@
 
 </body>
 <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
-<script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
+<script src="../static/costil.js"></script>
 </html>
