@@ -10,7 +10,8 @@
 <div id="particles-js">
     <div class="col-md-4" id="center-div">
         <h3>Please, edit info about book here:</h3>
-        <form th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}" method="post">
+        <form th:href="edit.html" th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}"
+              method="post">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input class="form-control" id="title" type="text" th:field="*{title}" th:required="required">
