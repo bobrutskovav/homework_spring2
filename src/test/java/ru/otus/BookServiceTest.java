@@ -1,11 +1,6 @@
 package ru.otus;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Optional;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +22,15 @@ import ru.otus.domain.Genre;
 import ru.otus.service.BookService;
 import ru.otus.service.BookServiceImpl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+
 @RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class BookServiceTest {
 
 
@@ -36,7 +41,6 @@ public class BookServiceTest {
     private BookService bookService;
     @MockBean
     private BookRepository bookRepository;
-
 
     @MockBean
     private CommentRepository commentRepository;
@@ -53,7 +57,7 @@ public class BookServiceTest {
         book.setAuthor(new Author(AUTHOR));
         book.setComments(new ArrayList<>());
         book.setTitle(TITLE);
-        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(Optional.of(book));
+        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(Collections.singletonList(book));
         baos = new ByteArrayOutputStream();
         ps = new PrintStream(baos);
         System.setOut(ps);

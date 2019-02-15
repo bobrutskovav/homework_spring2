@@ -13,7 +13,7 @@ import ru.otus.domain.Book;
 import ru.otus.domain.BookNotFoundException;
 import ru.otus.service.BookService;
 
-import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class BookController {
@@ -29,7 +29,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @GetMapping("/library")
+    @GetMapping({"/library", "/"})
     public String libraryPage(Model model) {
         model.addAttribute("allBooks", bookRepository.findAll());
         return "library";
@@ -65,8 +65,8 @@ public class BookController {
 
     @PostMapping("/library/search")
     public String searchBook(@RequestParam(name = "titleForSearch") String titleForSearch, Model model) {
-        Book book = bookRepository.findByTitle(titleForSearch).orElseThrow(BookNotFoundException::new);
-        model.addAttribute("allBooks", Collections.singletonList(book));
+        List<Book> foundBooks = bookRepository.findByTitle(titleForSearch);
+        model.addAttribute("allBooks", foundBooks);
         return "library";
     }
 }

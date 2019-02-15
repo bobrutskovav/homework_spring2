@@ -1,7 +1,5 @@
 package ru.otus.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookRepository;
@@ -10,6 +8,9 @@ import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -53,9 +54,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
-        Book book = bookRepository.findByTitle(name).orElse(null);
-        if (book != null) {
-            printInfoAboutBook(book);
+        List<Book> books = bookRepository.findByTitle(name);
+        if (!books.isEmpty()) {
+            books.forEach(this::printInfoAboutBook);
         } else {
             System.out.println("No book found by Title " + name);
         }
@@ -84,25 +85,31 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addCommentToBook(String comment, String title) {
-        Book foundedBook = bookRepository.findByTitle(title).orElse(null);
-        if (foundedBook.getTitle() == null) {
+        List<Book> foundedBooks = bookRepository.findByTitle(title);
+        if (foundedBooks.isEmpty()) {
             System.out.println(String.format("Book with Title %s not found", title));
             return;
         }
-        String idOFoundedBook = foundedBook.getId();
-        List<Comment> currentComments = foundedBook.getComments();
-        currentComments.add(new Comment(comment));
-        bookRepository.save(foundedBook);
-        printInfoAboutBook(bookRepository.findById(idOFoundedBook).orElse(null));
+
+        foundedBooks.forEach(foundedBook -> {
+            String idOFoundedBook = foundedBook.getId();
+            List<Comment> currentComments = foundedBook.getComments();
+            currentComments.add(new Comment(comment));
+            bookRepository.save(foundedBook);
+            printInfoAboutBook(bookRepository.findById(idOFoundedBook).get());
+        });
+
     }
 
     @Override
     public void deleteBook(String title) {
 
-        Book foundBook = bookRepository.findByTitle(title).orElse(null);
-        System.out.println("Found book :\n" + foundBook);
-        bookRepository.delete(foundBook);
-        System.out.println("Done");
+        List<Book> foundBooks = bookRepository.findByTitle(title);
+        foundBooks.forEach(book -> {
+            System.out.println("Found book :\n" + book);
+            bookRepository.delete(book);
+            System.out.println("Done");
+        });
     }
 
 
