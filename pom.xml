@@ -59,7 +59,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.mongobee/mongobee -->
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+
     </dependencies>
 
     <properties>
@@ -81,7 +88,7 @@
         <repository>
             <id>nspkrep</id>
             <name>NspkRepository</name>
-            <url>http://msk1-vm-nexus01.unix.nspk.ru:8081/nexus/content/repositories/central</url>
+            <url>http://nexus.nspk.ru:8081/nexus/content/repositories/central</url>
         </repository>
     </repositories>
 

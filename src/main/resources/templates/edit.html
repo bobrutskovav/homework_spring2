@@ -3,15 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${bookForEdit.title}"></title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/costil.css">
 </head>
 <body>
+<div id="particles-js">
+    <div class="col-md-4" id="center-div">
+        <h3>Please, edit info about book here:</h3>
+        <form th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}" method="post">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input class="form-control" id="title" type="text" th:field="*{title}" th:required="required">
+                <label for="author">Author</label>
+                <input class="form-control" id="author" th:field="*{author.name}" type="text" th:required="required">
+                <label for="genre">Genre</label>
+                <input class="form-control" id="genre" th:field="*{genre.title}" type="text" th:required="required">
+                <button type="submit" class="btn btn-primary mt-3">Edit this book</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-
-<form th:href="edit.html" th:action="@{/library/edit(id=${bookForEdit.id})}" th:object="${bookForEdit}" method="post">
-    <label>Title <input type="text" th:field="*{title}" th:required="required"></label>
-    <label>Author <input th:field="*{author.name}" type="text" th:required="required"></label>
-    <label>Genre <input th:field="*{genre.title}" type="text" th:required="required"></label>
-    <button type="submit">Edit this book</button>
 
 </body>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
+<script src="../static/costil.js"></script>
 </html>
