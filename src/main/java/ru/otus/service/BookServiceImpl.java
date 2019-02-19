@@ -1,5 +1,7 @@
 package ru.otus.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookRepository;
@@ -15,6 +17,8 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
+    private Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -27,7 +31,7 @@ public class BookServiceImpl implements BookService {
 
         Book foundedBook = bookRepository.findByTitleAndAuthorNameAndGenreTitle(bookName, authorName, genreTitle);
         if (foundedBook != null) {
-            System.out.println("This book already here!");
+            log.info("This book already here!");
             printInfoAboutBook(foundedBook);
             return;
         }
@@ -38,12 +42,12 @@ public class BookServiceImpl implements BookService {
         newBook.setComments(new ArrayList<>());
         //newBook -t tttt -a aaaaa -g ggggg
         bookRepository.save(newBook);
-        System.out.println("Book is stored");
+        log.info("Book is stored");
     }
 
     @Override
     public void printAllBooks() {
-        System.out.println("Here is all book we have:");
+        log.info("Here is all book we have:");
         bookRepository.findAll().forEach(this::printInfoAboutBook);
     }
 
@@ -58,15 +62,15 @@ public class BookServiceImpl implements BookService {
         if (!books.isEmpty()) {
             books.forEach(this::printInfoAboutBook);
         } else {
-            System.out.println("No book found by Title " + name);
+            log.info("No book found by Title " + name);
         }
     }
 
     @Override
     public void printAllAuthors() {
         bookRepository.findByAuthorIsNotNull().forEach(b -> {
-            System.out.println("====Author====");
-            System.out.println(b.getAuthor());
+            log.info("====Author====");
+            log.info(b.getAuthor().toString());
         });
     }
 
@@ -74,8 +78,8 @@ public class BookServiceImpl implements BookService {
     public void printAllGenres() {
         List<Book> allGenres = bookRepository.findByGenreIsNotNull();
         allGenres.forEach(g -> {
-            System.out.println("====Genre====");
-            System.out.println(g.getGenre().getTitle());
+            log.info("====Genre====");
+            log.info(g.getGenre().getTitle());
         });
     }
 
@@ -87,7 +91,7 @@ public class BookServiceImpl implements BookService {
     public void addCommentToBook(String comment, String title) {
         List<Book> foundedBooks = bookRepository.findByTitle(title);
         if (foundedBooks.isEmpty()) {
-            System.out.println(String.format("Book with Title %s not found", title));
+            log.info("Book with Title {} not found", title);
             return;
         }
 
@@ -106,20 +110,20 @@ public class BookServiceImpl implements BookService {
 
         List<Book> foundBooks = bookRepository.findByTitle(title);
         foundBooks.forEach(book -> {
-            System.out.println("Found book :\n" + book);
+            log.info("Found book :\n" + book);
             bookRepository.delete(book);
-            System.out.println("Done");
+            log.info("Done");
         });
     }
 
 
     private void printInfoAboutBook(Book book) {
-        System.out.println("==============");
-        System.out.println("ID: " + book.getId());
-        System.out.println("Title: " + book.getTitle());
-        System.out.println("Author: " + book.getAuthor().getName());
-        System.out.println("Genre: " + book.getGenre().getTitle());
-        book.getComments().forEach(c -> System.out.println("\nComment :" + c.getText()));
+        log.info("==============");
+        log.info("ID: " + book.getId());
+        log.info("Title: " + book.getTitle());
+        log.info("Author: " + book.getAuthor().getName());
+        log.info("Genre: " + book.getGenre().getTitle());
+        book.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
     }
 
 
