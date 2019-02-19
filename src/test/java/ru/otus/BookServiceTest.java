@@ -24,8 +24,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @RunWith(SpringRunner.class)
+
 public class BookServiceTest {
 
 
@@ -36,7 +38,6 @@ public class BookServiceTest {
     private BookService bookService;
     @MockBean
     private BookRepository bookRepository;
-
 
     @MockBean
     private CommentRepository commentRepository;
@@ -53,7 +54,7 @@ public class BookServiceTest {
         book.setAuthor(new Author(AUTHOR));
         book.setComments(new ArrayList<>());
         book.setTitle(TITLE);
-        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(book);
+        Mockito.when(bookRepository.findByTitle(TITLE)).thenReturn(Collections.singletonList(book));
         baos = new ByteArrayOutputStream();
         ps = new PrintStream(baos);
         System.setOut(ps);

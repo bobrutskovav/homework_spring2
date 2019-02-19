@@ -1,7 +1,7 @@
 package ru.otus.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.otus.dao.BookRepository;
@@ -11,8 +11,13 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BookServiceImpl implements BookService {
+
+    private Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
     private BookRepository bookRepository;
@@ -26,7 +31,7 @@ public class BookServiceImpl implements BookService {
 
         Book foundedBook = bookRepository.findByTitleAndAuthorNameAndGenreTitle(bookName, authorName, genreTitle);
         if (foundedBook != null) {
-            System.out.println("This book already here!");
+            log.info("This book already here!");
             printInfoAboutBook(foundedBook);
             return;
         }
@@ -37,12 +42,12 @@ public class BookServiceImpl implements BookService {
         newBook.setComments(new ArrayList<>());
         //newBook -t tttt -a aaaaa -g ggggg
         bookRepository.save(newBook);
-        System.out.println("Book is stored");
+        log.info("Book is stored");
     }
 
     @Override
     public void printAllBooks() {
-        System.out.println("Here is all book we have:");
+        log.info("Here is all book we have:");
         bookRepository.findAll().forEach(this::printInfoAboutBook);
     }
 
@@ -53,19 +58,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void printByName(String name) {
-        Book book = bookRepository.findByTitle(name);
-        if (book != null) {
-            printInfoAboutBook(book);
+        List<Book> books = bookRepository.findByTitle(name);
+        if (!books.isEmpty()) {
+            books.forEach(this::printInfoAboutBook);
         } else {
-            System.out.println("No book found by Title " + name);
+            log.info("No book found by Title " + name);
         }
     }
 
     @Override
     public void printAllAuthors() {
         bookRepository.findByAuthorIsNotNull().forEach(b -> {
-            System.out.println("====Author====");
-            System.out.println(b.getAuthor());
+            log.info("====Author====");
+            log.info(b.getAuthor().toString());
         });
     }
 
@@ -73,8 +78,8 @@ public class BookServiceImpl implements BookService {
     public void printAllGenres() {
         List<Book> allGenres = bookRepository.findByGenreIsNotNull();
         allGenres.forEach(g -> {
-            System.out.println("====Genre====");
-            System.out.println(g.getGenre().getTitle());
+            log.info("====Genre====");
+            log.info(g.getGenre().getTitle());
         });
     }
 
@@ -84,34 +89,42 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addCommentToBook(String comment, String title) {
-        Book foundedBook = bookRepository.findByTitle(title);
-        if (foundedBook.getTitle() == null) {
-            System.out.println(String.format("Book with Title %s not found", title));
+        List<Book> foundedBooks = bookRepository.findByTitle(title);
+        if (foundedBooks.isEmpty()) {
+            log.info("Book with Title {} not found", title);
             return;
         }
-        String idOFoundedBook = foundedBook.getId();
-        List<Comment> currentComments = foundedBook.getComments();
-        currentComments.add(new Comment(comment));
-        bookRepository.save(foundedBook);
-        printInfoAboutBook(bookRepository.findById(idOFoundedBook).orElse(null));
+
+        foundedBooks.forEach(foundedBook -> {
+            String idOFoundedBook = foundedBook.getId();
+            List<Comment> currentComments = foundedBook.getComments();
+            currentComments.add(new Comment(comment));
+            bookRepository.save(foundedBook);
+            printInfoAboutBook(bookRepository.findById(idOFoundedBook).get());
+        });
+
     }
 
     @Override
     public void deleteBook(String title) {
 
-        Book foundBook = bookRepository.findByTitle(title);
-        System.out.println("Found book :\n" + foundBook);
-        bookRepository.delete(foundBook);
-        System.out.println("Done");
+        List<Book> foundBooks = bookRepository.findByTitle(title);
+        foundBooks.forEach(book -> {
+            log.info("Found book :\n" + book);
+            bookRepository.delete(book);
+            log.info("Done");
+        });
     }
 
 
     private void printInfoAboutBook(Book book) {
-        System.out.println("==============");
-        System.out.println("ID: " + book.getId());
-        System.out.println("Title: " + book.getTitle());
-        System.out.println("Author: " + book.getAuthor().getName());
-        System.out.println("Genre: " + book.getGenre().getTitle());
-        book.getComments().forEach(c -> System.out.println("\nComment :" + c.getText()));
+        log.info("==============");
+        log.info("ID: " + book.getId());
+        log.info("Title: " + book.getTitle());
+        log.info("Author: " + book.getAuthor().getName());
+        log.info("Genre: " + book.getGenre().getTitle());
+        book.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
     }
+
+
 }
