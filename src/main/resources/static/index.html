@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Library</title>
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../static/costil.css">
-    <script src="webjars/vue/2.5.16/vue.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="costil.css">
+
 
 </head>
 <body>
@@ -42,7 +42,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="book : persons">
+                    <tr v-for="book : books">
                         <td th:text="${book.title}">John Doe
                         </td>
                         <td th:text="${book.genre.title}">Horror
@@ -51,7 +51,7 @@
                         <td th:text="${book.author.name}">Anonymous
                         </td>
                         <td>
-                            <a th:href="@{/library/edit(id=${book.id})}" href="edit.html">Edit</a>
+                            <a th:href="@{/library/edit(id=${book.id})}" href="../templates/edit.html">Edit</a>
                         </td>
                         <td th:if="${not #lists.isEmpty(book.comments)}">Comments
                             <th:block th:each="bookComment : ${book.comments}">
@@ -71,6 +71,8 @@
 </div>
 
 </body>
+<script src="webjars/vue/2.5.16/vue.min.js"></script>
+<script src="main.js"></script>
 <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
-<script src="../static/costil.js"></script>
+<script src="costil.js"></script>
 </html>
