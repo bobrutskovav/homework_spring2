@@ -1,23 +1,22 @@
 package ru.otus.controller;
 
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.dao.BookRepository;
 import ru.otus.domain.Book;
 import ru.otus.domain.BookNotFoundException;
 import ru.otus.service.BookService;
 
-import java.util.List;
-
-@Controller
+@RestController
 public class BookController {
 
 
@@ -34,9 +33,8 @@ public class BookController {
     }
 
     @GetMapping({"/library", "/"})
-    public String libraryPage(Model model) {
-        model.addAttribute("allBooks", bookRepository.findAll());
-        return "library";
+    public List<Book> libraryPage() {
+        return bookRepository.findAll();
     }
 
     @GetMapping("/library/newbook")
