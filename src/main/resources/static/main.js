@@ -1,11 +1,16 @@
-fetch('/library').then(response = > response.json()
-).
-then(books = > new Vue({
-    el: '#vue-app',
+const app = new Vue({
+    el: 'vue-app',
     data: {
-        allBooks: books
+        displayedBooks: []
+    },
+    created() {
+        fetch('/library').then(response => response.json())
+            .then(data => self.data.displayedBooks = data);
     }
-})
-)
-;
+});
+
+
+
+
+
 
