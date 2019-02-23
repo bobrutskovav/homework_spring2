@@ -1,20 +1,17 @@
 package ru.otus.controller;
 
 
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.dao.BookRepository;
 import ru.otus.domain.Book;
 import ru.otus.domain.BookNotFoundException;
 import ru.otus.service.BookService;
+
+import java.util.List;
 
 @RestController
 public class BookController {
@@ -34,41 +31,28 @@ public class BookController {
 
     @GetMapping({"/library", "/"})
     public List<Book> libraryPage() {
+        log.debug("===> GET ===> AllBooks");
         return bookRepository.findAll();
     }
 
-    @GetMapping("/library/newbook")
-    public String newBookPage(Model model) {
-        model.addAttribute("book", new Book());
-        return "newbook";
+    @PostMapping("/library/book")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void newBook(@RequestBody Book newBook) {
+        log.debug("===> POST ===> CreateBook {}", newBook);
+        bookService.storeNewBook(newBook.getTitle(), newBook.getAuthor().getName(), newBook.getGenre().getTitle());
     }
 
-    @PostMapping("/library/newbook")
-    public String addBook(@ModelAttribute Book book, Model model) {
-        bookService.storeNewBook(book.getTitle(), book.getAuthor().getName(), book.getGenre().getTitle());
-        model.addAttribute("allBooks", bookRepository.findAll());
-        return "library";
-    }
 
-    @GetMapping("/library/edit")
-    public String editPage(@RequestParam("id") String id, Model model) {
+    @PatchMapping("/library/book/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void updateBook(@PathVariable("id") String id, @RequestBody Book bookData) {
+        log.debug("===> PATCH ===> UpdateBook {}", id);
         Book bookForEdit = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        model.addAttribute("bookForEdit", bookForEdit);
-        return "edit";
+        bookForEdit.setTitle(bookData.getTitle());
+        bookForEdit.setAuthor(bookData.getAuthor());
+        bookForEdit.setGenre(bookData.getGenre());
+        bookRepository.save(bookForEdit);
     }
 
-    @PostMapping("/library/edit")
-    public String updateBook(@ModelAttribute Book book, Model model) {
-        bookRepository.save(book);
-        model.addAttribute("allBooks", bookRepository.findAll());
-        return "library";
 
-    }
-
-    @PostMapping("/library/search")
-    public String searchBook(@RequestParam(name = "titleForSearch") String titleForSearch, Model model) {
-        List<Book> foundBooks = bookRepository.findByTitle(titleForSearch);
-        model.addAttribute("allBooks", foundBooks);
-        return "library";
-    }
 }
