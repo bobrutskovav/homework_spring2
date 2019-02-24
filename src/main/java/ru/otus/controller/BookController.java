@@ -29,7 +29,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @GetMapping({"/library", "/"})
+    @GetMapping({"/library"})
     public List<Book> libraryPage() {
         log.debug("===> GET ===> AllBooks");
         return bookRepository.findAll();

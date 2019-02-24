@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Library</title>
@@ -21,18 +20,17 @@
 
             <div>
 
-                <form th:action="@{/library/search}" method="post">
-                    <div class="form-group">
-                        <label for="searchInput">Search</label>
-                        <input id="searchInput" class="form-control" type="text" name="titleForSearch"
-                               placeholder="Enter title here">
-                        <button type="submit" class="btn btn-primary mt-3">Search</button>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label for="searchInput">Search</label>
+                    <input v-model="currentBookToSearch" id="searchInput" class="form-control" type="text"
+                           name="titleForSearch"
+                           placeholder="Enter title here">
+                    <button v-on:click="searchBook" class="btn btn-primary mt-3">Search</button>
+                </div>
 
 
             </div>
-            <div class="book-box" v-if="displayedBooks.length != 0">
+            <div class="book-box" v-if="displayedBooks.length > 0">
                 <table class="books table">
                     <thead class="thead-dark">
                     <tr>
@@ -42,13 +40,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="book : displayedBooks">
+                    <tr v-for="book in displayedBooks">
                         <td>{{book.title}}
                         </td>
                         <td>{{book.genre.title}}
                         </td>
 
-                        <td>{book.author.name}
+                        <td>{{book.author.name}}
                         </td>
                         <td>
                             <a th:href="@{/library/edit(id=${book.id})}" href="../templates/edit.html">Edit</a>
