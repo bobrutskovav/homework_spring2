@@ -14,8 +14,8 @@
         <div class="col-md-4" id="center-div">
             <h3>Welcome to best Library in the Hello World!</h3>
 
-            <h5>Our Books</h5>
-            <h5>Sorry, right now we don't have a books!</h5>
+            <h5 v-if="displayedBooks.length > 0">Our Books</h5>
+            <h5 v-else>Sorry, right now we don't have a books!</h5>
 
 
             <div>
