@@ -11,15 +11,23 @@ const app = new Vue({
     },
     methods: {
         searchBook: function () {
-            fetch('/library').then(response => response.json())
-                .then((data) => app.displayedBooks = data);
             let filteredBooks = [];
-            app.displayedBooks.forEach(book => {
-                if (book.title.includes(this.currentBookToSearch)) {
-                    filteredBooks.push(book);
-                }
-            });
-            app.displayedBooks = filteredBooks;
+
+            fetch('/library')
+                .then(function (response) {
+                    response.json().then(
+                        function (json) {
+                            app.displayedBooks = json;
+                            app.displayedBooks.forEach(book => {
+                                if (book.title.includes(app.currentBookToSearch)) {
+                                    filteredBooks.push(book);
+                                }
+                            });
+                            app.displayedBooks = filteredBooks;
+                        })
+
+
+                })
         }
     }
 });
