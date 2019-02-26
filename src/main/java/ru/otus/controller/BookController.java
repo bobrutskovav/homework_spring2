@@ -54,5 +54,12 @@ public class BookController {
         bookRepository.save(bookForEdit);
     }
 
+    @DeleteMapping("/library/book/{id}")
+    public void deleteBook(@PathVariable("id") String id) {
+        log.debug("===> DELETE ===> DeleteBook {}, id");
+        Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        bookRepository.delete(book);
+    }
+
 
 }

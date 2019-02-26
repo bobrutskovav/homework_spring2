@@ -6,14 +6,15 @@ const app = new Vue({
     },
     created() {
         let self = this;
-        fetch('/library').then(response => response.json())
+        getAllBooks()
+            .then(response => response.json())
             .then((data) => self.displayedBooks = data);
     },
     methods: {
         searchBook: function () {
             let filteredBooks = [];
 
-            fetch('/library')
+            getAllBooks()
                 .then(function (response) {
                     response.json().then(
                         function (json) {
@@ -29,11 +30,29 @@ const app = new Vue({
 
                 })
         },
-        deleteBook: function (bookId){
-             //ToDo DELETE method to service https://stackoverflow.com/questions/43529516/how-to-pass-a-parameter-to-vue-click
+        deleteBook: function (bookId) {
+            console.log(bookId);
+            fetch("/library/book/" + bookId,
+                {
+
+                    method: "DELETE",
+                }).then((response) => {
+                if (!response.ok) {
+                    throw new Error('Delete response was not ok for book with id ' + bookId);
+                }
+            }).finally(() => {
+                getAllBooks()
+                    .then(response => response.json())
+                    .then((data) => app.displayedBooks = data)
+            });
+
         }
     }
 });
+
+function getAllBooks() {
+    return fetch('/library');
+}
 
 
 

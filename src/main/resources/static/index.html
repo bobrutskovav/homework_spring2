@@ -48,14 +48,16 @@
 
                         <td>{{book.author.name}}
                         </td>
-                        <td>
-                            <a v-on:click="deleteBook(book.id)">Delete</a>
-                        </td>
                         <td>Comments
 
                             <span v-for="bookComment in book.comments">{{bookComment.text}}
                             </span>
 
+                        </td>
+                        <td>
+                            <button type="buttonnew" class="btn btn-outline-danger btn-sm"
+                                    v-on:click="deleteBook(book.id)">Delete
+                            </button>
                         </td>
                     </tr>
                     </tbody>
