@@ -30,7 +30,7 @@ const app = new Vue({
                 })
         },
         deleteBook: function (bookId){
-             //ToDo DELETE method to service
+             //ToDo DELETE method to service https://stackoverflow.com/questions/43529516/how-to-pass-a-parameter-to-vue-click
         }
     }
 });
