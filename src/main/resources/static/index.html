@@ -49,13 +49,13 @@
                         <td>{{book.author.name}}
                         </td>
                         <td>
-                            <a th:href="@{/library/edit(id=${book.id})}" href="../templates/edit.html">Edit</a>
+                            <a v-on:click="deleteBook(book.id)">Delete</a>
                         </td>
                         <td>Comments
-                            <th:block th:each="bookComment : ${book.comments}">
-                         <span th:text="${bookComment.text}">CommentToBook
-                    </span>
-                            </th:block>
+
+                            <span v-for="bookComment in book.comments">{{bookComment.text}}
+                            </span>
+
                         </td>
                     </tr>
                     </tbody>

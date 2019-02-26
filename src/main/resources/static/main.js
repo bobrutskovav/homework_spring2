@@ -28,6 +28,9 @@ const app = new Vue({
 
 
                 })
+        },
+        deleteBook: function (bookId){
+             //ToDo DELETE method to service
         }
     }
 });
