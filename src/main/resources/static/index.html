@@ -67,13 +67,13 @@
                 Book!
             </button>
             <div class="form-group" v-if="newBookAreaDisplayed">
-                <label for="title">Title</label>
-                <input class="form-control" id="title" type="text" required>
-                <label for="author">Author</label>
-                <input class="form-control" id="author" type="text" required>
-                <label for="genre">Genre</label>
-                <input class="form-control" id="genre" type="text" required>
-                <button type="submit" class="btn btn-primary mt-3">Add this book</button>
+                <label for="newBook.title">Title</label>
+                <input id="newBook.title" class="form-control" v-model="newBook.title" type="text" required>
+                <label for="newBook.author">Author</label>
+                <input id="newBook.author" class="form-control" v-model="newBook.author" type="text" required>
+                <label for="newBook.genre">Genre</label>
+                <input id="newBook.genre" class="form-control" v-model="newBook.genre" type="text" required>
+                <button v-on:click="addNewBook" class="btn btn-primary mt-3">Add this book</button>
             </div>
         </div>
     </div>
