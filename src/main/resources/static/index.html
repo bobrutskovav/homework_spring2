@@ -63,9 +63,18 @@
                     </tbody>
                 </table>
             </div>
-            <button th:onclick="'window.location.href=\'/library/newbook\''" class="btn btn-secondary mt-3">Add new
+            <button v-on:click="newBookAreaDisplayed = !newBookAreaDisplayed" class="btn btn-secondary mt-3">Add new
                 Book!
             </button>
+            <div class="form-group" v-if="newBookAreaDisplayed">
+                <label for="title">Title</label>
+                <input class="form-control" id="title" type="text" required>
+                <label for="author">Author</label>
+                <input class="form-control" id="author" type="text" required>
+                <label for="genre">Genre</label>
+                <input class="form-control" id="genre" type="text" required>
+                <button type="submit" class="btn btn-primary mt-3">Add this book</button>
+            </div>
         </div>
     </div>
 </div>

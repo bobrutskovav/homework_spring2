@@ -2,7 +2,8 @@ const app = new Vue({
     el: '#vue-app',
     data: {
         displayedBooks: [],
-        currentBookToSearch: ''
+        currentBookToSearch: '',
+        newBookAreaDisplayed: false;
     },
     created() {
         let self = this;
@@ -50,9 +51,12 @@ const app = new Vue({
     }
 });
 
+//ToDo https://stackoverflow.com/questions/42694457/getting-form-data-on-submit
+
 function getAllBooks() {
     return fetch('/library');
 }
+
 
 
 
