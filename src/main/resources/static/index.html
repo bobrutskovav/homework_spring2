@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="costil.css">
+
+
+</head>
+<body>
+<div id="particles-js">
+    <div id="vue-app">
+
+        <div class="col-md-4" id="center-div">
+            <h3>Welcome to best Library in the Hello World!</h3>
+
+            <h5 v-if="displayedBooks.length > 0">Our Books</h5>
+            <h5 v-else>Sorry, right now we don't have a books!</h5>
+
+
+            <div>
+
+                <div class="form-group">
+                    <label for="searchInput">Search</label>
+                    <input v-model="currentBookToSearch" id="searchInput" class="form-control" type="text"
+                           name="titleForSearch"
+                           placeholder="Enter title here">
+                    <button v-on:click="searchBook" class="btn btn-primary mt-3">Search</button>
+                </div>
+
+
+            </div>
+            <div class="book-box" v-if="displayedBooks.length > 0">
+                <table class="books table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Genre</th>
+                        <th scope="col">Author</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="book in displayedBooks">
+                        <td>{{book.title}}
+                        </td>
+                        <td>{{book.genre.title}}
+                        </td>
+
+                        <td>{{book.author.name}}
+                        </td>
+                        <td>Comments
+
+                            <span v-for="bookComment in book.comments">{{bookComment.text}}
+                            </span>
+
+                        </td>
+                        <td>
+                            <button type="buttonnew" class="btn btn-outline-danger btn-sm"
+                                    v-on:click="deleteBook(book.id)">Delete
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button v-on:click="newBookAreaDisplayed = !newBookAreaDisplayed" class="btn btn-secondary mt-3">Add new
+                Book!
+            </button>
+            <div class="form-group" v-if="newBookAreaDisplayed">
+                <label for="newBook.title">Title</label>
+                <input id="newBook.title" class="form-control" v-model="newBook.title" type="text" required>
+                <label for="newBook.author">Author</label>
+                <input id="newBook.author" class="form-control" v-model="newBook.author" type="text" required>
+                <label for="newBook.genre">Genre</label>
+                <input id="newBook.genre" class="form-control" v-model="newBook.genre" type="text" required>
+                <button v-on:click="addNewBook" class="btn btn-primary mt-3">Add this book</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="webjars/vue/2.5.16/vue.min.js"></script>
+<script src="main.js"></script>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> <!-- stats.js lib -->
+<script src="costil.js"></script>
+</html>
