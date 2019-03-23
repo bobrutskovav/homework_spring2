@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.CommentRepository;
 import ru.otus.domain.Author;
@@ -27,47 +28,52 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void storeNewBook(String bookName, String authorName, String genreTitle) {
+    public Mono<Void> storeNewBook(Mono<Book> bookToStoreMono) {
 
-        Book foundedBook = bookRepository.findByTitleAndAuthorNameAndGenreTitle(bookName, authorName, genreTitle);
-        if (foundedBook != null) {
-            log.info("This book already here!");
-            printInfoAboutBook(foundedBook);
-            return;
+        bookToStoreMono.doOnNext(book -> {
+            String bookTitle = book.getTitle();
+            String authorName = book.getAuthor().getName();
+            String genreTitle = book.getGenre().getTitle();
+
+            bookRepository.findByTitleAndAuthorNameAndGenreTitle(
+                    book.getTitle()
+                    , book.getAuthor().getName()
+                    , book.getGenre().getTitle()).doOnNext(foundedBook -> {
+                if (foundedBook != null) {
+                    log.info("This book already here!");
+                    printInfoAboutBook(foundedBook);
+                    return;
+                }
+                Book newBook = new Book();
+                newBook.setTitle(bookTitle);
+                newBook.setAuthor(new Author(authorName));
+                newBook.setGenre(new Genre(genreTitle));
+                newBook.setComments(new ArrayList<>());
+                //newBook -t tttt -a aaaaa -g ggggg
+                bookRepository.save(newBook);
+                log.info("Book is stored");
+            });
         }
-        Book newBook = new Book();
-        newBook.setTitle(bookName);
-        newBook.setAuthor(new Author(authorName));
-        newBook.setGenre(new Genre(genreTitle));
-        newBook.setComments(new ArrayList<>());
-        //newBook -t tttt -a aaaaa -g ggggg
-        bookRepository.save(newBook);
-        log.info("Book is stored");
     }
 
     @Override
-    public void printAllBooks() {
+    public Mono<Void> printAllBooks() {
         log.info("Here is all book we have:");
-        bookRepository.findAll().forEach(this::printInfoAboutBook);
+        bookRepository.findAll().doOnNext(this::printInfoAboutBook);
     }
 
     @Override
-    public void printAllByGenre(String genre) {
+    public Mono<Void> printAllByGenre(String genre) {
 
     }
 
     @Override
-    public void printByName(String name) {
-        List<Book> books = bookRepository.findByTitle(name);
-        if (!books.isEmpty()) {
-            books.forEach(this::printInfoAboutBook);
-        } else {
-            log.info("No book found by Title " + name);
-        }
+    public Mono<Void> printByName(String name) {
+        bookRepository.findByTitle(name).doOnNext(book -> printInfoAboutBook(book));
     }
 
     @Override
-    public void printAllAuthors() {
+    public Mono<Void> printAllAuthors() {
         bookRepository.findByAuthorIsNotNull().forEach(b -> {
             log.info("====Author====");
             log.info(b.getAuthor().toString());
@@ -75,7 +81,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void printAllGenres() {
+    public Mono<Void> printAllGenres() {
         List<Book> allGenres = bookRepository.findByGenreIsNotNull();
         allGenres.forEach(g -> {
             log.info("====Genre====");
@@ -83,12 +89,12 @@ public class BookServiceImpl implements BookService {
         });
     }
 
-    public void printAllComments() {
+    public Mono<Void> printAllComments() {
         commentRepository.findAll().forEach(System.out::println);
     }
 
     @Override
-    public void addCommentToBook(String comment, String title) {
+    public Mono<Void> addCommentToBook(String comment, String title) {
         List<Book> foundedBooks = bookRepository.findByTitle(title);
         if (foundedBooks.isEmpty()) {
             log.info("Book with Title {} not found", title);
@@ -106,7 +112,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBook(String title) {
+    public Mono<Void> deleteBook(String title) {
 
         List<Book> foundBooks = bookRepository.findByTitle(title);
         foundBooks.forEach(book -> {
@@ -117,7 +123,7 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    private void printInfoAboutBook(Book book) {
+    private Mono<Void> printInfoAboutBook(Book book) {
         log.info("==============");
         log.info("ID: " + book.getId());
         log.info("Title: " + book.getTitle());

@@ -1,22 +1,24 @@
 package ru.otus.service;
 
+import reactor.core.publisher.Mono;
+
 public interface BookService {
 
-    void storeNewBook(String bookName, String authorName, String genreTitle);
+    Mono<Void> storeNewBook(String bookName, String authorName, String genreTitle);
 
-    void printAllBooks();
+    Mono<Void> printAllBooks();
 
-    void printAllComments();
+    Mono<Void> printAllComments();
 
-    void printAllByGenre(String genre);
+    Mono<Void> printAllByGenre(String genre);
 
-    void printByName(String name);
+    Mono<Void> printByName(String name);
 
-    void printAllAuthors();
+    Mono<Void> printAllAuthors();
 
-    void printAllGenres();
+    Mono<Void> printAllGenres();
 
-    void addCommentToBook(String comment, String title);
+    Mono<Void> addCommentToBook(String comment, String title);
 
-    void deleteBook(String title);
+    Mono<Void> deleteBook(String title);
 }
