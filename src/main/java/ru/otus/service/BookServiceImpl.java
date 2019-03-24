@@ -28,108 +28,106 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Mono<Void> storeNewBook(Mono<Book> bookToStoreMono) {
+    public Mono<Void> storeNewBook(String bookTitle, String bookGenre, String authorName) {
+        Book book = new Book();
+        book.setTitle(bookTitle);
+        book.setAuthor(new Author(authorName));
+        book.setGenre(new Genre());
+        book.setComments(new ArrayList<>());
 
-        bookToStoreMono.doOnNext(book -> {
-            String bookTitle = book.getTitle();
-            String authorName = book.getAuthor().getName();
-            String genreTitle = book.getGenre().getTitle();
+        return Mono.just(book).doOnNext(b -> {
+            String bTitle = b.getTitle();
+            String aName = b.getAuthor().getName();
+            String gTitle = b.getGenre().getTitle();
 
             bookRepository.findByTitleAndAuthorNameAndGenreTitle(
-                    book.getTitle()
-                    , book.getAuthor().getName()
-                    , book.getGenre().getTitle()).doOnNext(foundedBook -> {
+                    bTitle
+                    , aName
+                    , gTitle).doOnNext(foundedBook -> {
                 if (foundedBook != null) {
                     log.info("This book already here!");
                     printInfoAboutBook(foundedBook);
                     return;
                 }
-                Book newBook = new Book();
-                newBook.setTitle(bookTitle);
-                newBook.setAuthor(new Author(authorName));
-                newBook.setGenre(new Genre(genreTitle));
-                newBook.setComments(new ArrayList<>());
+
                 //newBook -t tttt -a aaaaa -g ggggg
-                bookRepository.save(newBook);
+                bookRepository.save(book).subscribe();
                 log.info("Book is stored");
-            });
-        }
+            }).subscribe();
+        }).then();
     }
 
     @Override
     public Mono<Void> printAllBooks() {
         log.info("Here is all book we have:");
-        bookRepository.findAll().doOnNext(this::printInfoAboutBook);
+        return Mono.from(bookRepository.findAll().doOnNext(this::printInfoAboutBook).then());
     }
 
     @Override
     public Mono<Void> printAllByGenre(String genre) {
-
+        return Mono.empty();
     }
 
     @Override
     public Mono<Void> printByName(String name) {
-        bookRepository.findByTitle(name).doOnNext(book -> printInfoAboutBook(book));
+        return Mono.from(bookRepository.findByTitle(name).doOnNext(this::printInfoAboutBook).then());
     }
 
     @Override
     public Mono<Void> printAllAuthors() {
-        bookRepository.findByAuthorIsNotNull().forEach(b -> {
+        return Mono.from(bookRepository.findByAuthorIsNotNull().doOnNext(b -> {
             log.info("====Author====");
             log.info(b.getAuthor().toString());
-        });
+        }).then());
     }
 
     @Override
     public Mono<Void> printAllGenres() {
-        List<Book> allGenres = bookRepository.findByGenreIsNotNull();
-        allGenres.forEach(g -> {
+        return Mono.from(bookRepository.findByGenreIsNotNull().doOnNext(g -> {
             log.info("====Genre====");
             log.info(g.getGenre().getTitle());
-        });
+        }).then());
     }
 
     public Mono<Void> printAllComments() {
-        commentRepository.findAll().forEach(System.out::println);
+        return Mono.from(commentRepository.findAll().doOnNext(System.out::println).then());
     }
 
     @Override
     public Mono<Void> addCommentToBook(String comment, String title) {
-        List<Book> foundedBooks = bookRepository.findByTitle(title);
-        if (foundedBooks.isEmpty()) {
-            log.info("Book with Title {} not found", title);
-            return;
-        }
+        return Mono.from(bookRepository.findByTitle(title).doOnNext(foundedBook -> {
 
-        foundedBooks.forEach(foundedBook -> {
             String idOFoundedBook = foundedBook.getId();
             List<Comment> currentComments = foundedBook.getComments();
             currentComments.add(new Comment(comment));
-            bookRepository.save(foundedBook);
-            printInfoAboutBook(bookRepository.findById(idOFoundedBook).get());
-        });
+            bookRepository.save(foundedBook).subscribe();
+            bookRepository.findById(idOFoundedBook).doOnNext(this::printInfoAboutBook).subscribe();
+        }).then());
 
     }
 
     @Override
     public Mono<Void> deleteBook(String title) {
 
-        List<Book> foundBooks = bookRepository.findByTitle(title);
-        foundBooks.forEach(book -> {
+        return Mono.from(bookRepository.findByTitle(title).doOnNext(book -> {
             log.info("Found book :\n" + book);
             bookRepository.delete(book);
             log.info("Done");
-        });
+        }).then());
     }
 
 
     private Mono<Void> printInfoAboutBook(Book book) {
-        log.info("==============");
-        log.info("ID: " + book.getId());
-        log.info("Title: " + book.getTitle());
-        log.info("Author: " + book.getAuthor().getName());
-        log.info("Genre: " + book.getGenre().getTitle());
-        book.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
+
+        return Mono.just(book).doOnNext(b -> {
+            log.info("==============");
+            log.info("ID: " + b.getId());
+            log.info("Title: " + b.getTitle());
+            log.info("Author: " + b.getAuthor().getName());
+            log.info("Genre: " + b.getGenre().getTitle());
+            b.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
+        }).then();
+
     }
 
 

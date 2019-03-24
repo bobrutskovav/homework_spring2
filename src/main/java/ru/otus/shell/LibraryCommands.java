@@ -18,33 +18,35 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Show all books in Library", key = "showAllBooks")
     public void printAllBooks() {
-        bookService.printAllBooks();
+        bookService.printAllBooks().subscribe();
 
     }
 
 
     @ShellMethod(value = "Show all genres in Library", key = "showAllGenres")
     public void printAllGenres() {
-        bookService.printAllGenres();
+        bookService.printAllGenres().subscribe();
 
     }
 
     @ShellMethod(value = "Add comment to Book", key = "addComment")
     public void addComment(@ShellOption({"-t", "--title"}) String bookTitle,
                            @ShellOption({"-c", "--comment"}) String comment) {
-        bookService.addCommentToBook(comment, bookTitle);
+        bookService.addCommentToBook(comment, bookTitle).subscribe();
 
     }
 
     @ShellMethod(value = "Show All Authors", key = "showAllAuthors")
     public void showAllAuthors() {
-        bookService.printAllAuthors();
+        bookService.printAllAuthors().subscribe();
     }
 
     @ShellMethod(value = "Put new book in Library", key = "newBook")
     public void storeNewBook(@ShellOption({"-t", "--title"}) String title,
                              @ShellOption({"-a", "--author"}) String author, @ShellOption({"-g", "--genre"}) String genre) {
-        bookService.storeNewBook(title, author, genre);
+
+
+        bookService.storeNewBook(title, author, genre).subscribe();
     }
 
     @ShellMethod(value = "Show book in Library by title", key = "findByTitle")

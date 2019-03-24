@@ -38,7 +38,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> newBook(@RequestBody Book newBook) {
         log.debug("===> POST ===> CreateBook {}", newBook);
-        bookService.storeNewBook(newBook.getTitle(), newBook.getAuthor().getName(), newBook.getGenre().getTitle());
+        return bookService.storeNewBook(newBook.getTitle(), newBook.getAuthor().getName(), newBook.getGenre().getTitle());
     }
 
 

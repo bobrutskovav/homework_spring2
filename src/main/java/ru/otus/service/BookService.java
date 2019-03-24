@@ -4,7 +4,7 @@ import reactor.core.publisher.Mono;
 
 public interface BookService {
 
-    Mono<Void> storeNewBook(String bookName, String authorName, String genreTitle);
+    Mono<Void> storeNewBook(String bookTitle, String bookGenre, String authorName);
 
     Mono<Void> printAllBooks();
 
