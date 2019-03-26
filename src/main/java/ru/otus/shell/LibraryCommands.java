@@ -61,7 +61,7 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Prints all Comments", key = "showAllComments")
     public void showAllComments() {
-        bookService.printAllComments();
+        bookService.printAllComments().subscribe();
     }
 
 }
