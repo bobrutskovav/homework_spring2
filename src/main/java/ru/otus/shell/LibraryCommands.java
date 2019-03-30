@@ -51,12 +51,12 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Show book in Library by title", key = "findByTitle")
     public void showBookByTitle(@ShellOption String title) {
-        bookService.printByName(title);
+        bookService.printByName(title).subscribe();
     }
 
     @ShellMethod(value = "Remove book from library with Title", key = "removeBook")
     public void removeByTitle(@ShellOption({"-t", "--title"}) String title) {
-        bookService.deleteBook(title);
+        bookService.deleteBook(title).subscribe();
     }
 
     @ShellMethod(value = "Prints all Comments", key = "showAllComments")

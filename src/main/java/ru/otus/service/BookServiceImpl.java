@@ -109,17 +109,15 @@ public class BookServiceImpl implements BookService {
     }
 
 
-    private Mono<Void> printInfoAboutBook(Book book) {
+    private Book printInfoAboutBook(Book book) {
 
-        return Mono.just(book).map(b -> {
             log.info("==============");
-            log.info("ID: " + b.getId());
-            log.info("Title: " + b.getTitle());
-            log.info("Author: " + b.getAuthor().getName());
-            log.info("Genre: " + b.getGenre().getTitle());
-            b.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
-            return b;
-        }).then();
+        log.info("ID: " + book.getId());
+        log.info("Title: " + book.getTitle());
+        log.info("Author: " + book.getAuthor().getName());
+        log.info("Genre: " + book.getGenre().getTitle());
+        book.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
+        return book;
 
     }
 
