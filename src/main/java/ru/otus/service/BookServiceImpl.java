@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import ru.otus.dao.BookRepository;
 import ru.otus.dao.CommentRepository;
 import ru.otus.domain.Author;
@@ -27,103 +28,97 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void storeNewBook(String bookName, String authorName, String genreTitle) {
+    public Mono<Void> storeNewBook(String bookTitle, String bookGenre, String authorName) {
+        Book book = new Book();
+        book.setTitle(bookTitle);
+        book.setAuthor(new Author(authorName));
+        book.setGenre(new Genre());
+        book.setComments(new ArrayList<>());
 
-        Book foundedBook = bookRepository.findByTitleAndAuthorNameAndGenreTitle(bookName, authorName, genreTitle);
-        if (foundedBook != null) {
-            log.info("This book already here!");
-            printInfoAboutBook(foundedBook);
-            return;
-        }
-        Book newBook = new Book();
-        newBook.setTitle(bookName);
-        newBook.setAuthor(new Author(authorName));
-        newBook.setGenre(new Genre(genreTitle));
-        newBook.setComments(new ArrayList<>());
-        //newBook -t tttt -a aaaaa -g ggggg
-        bookRepository.save(newBook);
-        log.info("Book is stored");
+        return bookRepository.findByTitleAndAuthorNameAndGenreTitle(
+                bookTitle
+                , authorName
+                , bookGenre).switchIfEmpty(Mono.just(book)).flatMap(bookRepository::save).then();
+
     }
 
     @Override
-    public void printAllBooks() {
+    public Mono<Void> printAllBooks() {
         log.info("Here is all book we have:");
-        bookRepository.findAll().forEach(this::printInfoAboutBook);
+        return bookRepository.findAll().map(this::printInfoAboutBook).then();
     }
 
     @Override
-    public void printAllByGenre(String genre) {
-
+    public Mono<Void> printAllByGenre(String genre) {
+        return Mono.empty();
     }
 
     @Override
-    public void printByName(String name) {
-        List<Book> books = bookRepository.findByTitle(name);
-        if (!books.isEmpty()) {
-            books.forEach(this::printInfoAboutBook);
-        } else {
-            log.info("No book found by Title " + name);
-        }
+    public Mono<Void> printByName(String name) {
+        return bookRepository.findByTitle(name).map(this::printInfoAboutBook).then();
     }
 
     @Override
-    public void printAllAuthors() {
-        bookRepository.findByAuthorIsNotNull().forEach(b -> {
+    public Mono<Void> printAllAuthors() {
+        return bookRepository.findByAuthorIsNotNull().map(b -> {
             log.info("====Author====");
             log.info(b.getAuthor().toString());
-        });
+            return b;
+        }).then();
     }
 
     @Override
-    public void printAllGenres() {
-        List<Book> allGenres = bookRepository.findByGenreIsNotNull();
-        allGenres.forEach(g -> {
+    public Mono<Void> printAllGenres() {
+        return bookRepository.findByGenreIsNotNull().map(g -> {
             log.info("====Genre====");
             log.info(g.getGenre().getTitle());
-        });
+            return g;
+        }).then();
     }
 
-    public void printAllComments() {
-        commentRepository.findAll().forEach(System.out::println);
+    public Mono<Void> printAllComments() {
+        return commentRepository.findAll().map(comment -> {
+            System.out.println(comment);
+            return comment;
+        }).then();
     }
 
     @Override
-    public void addCommentToBook(String comment, String title) {
-        List<Book> foundedBooks = bookRepository.findByTitle(title);
-        if (foundedBooks.isEmpty()) {
-            log.info("Book with Title {} not found", title);
-            return;
-        }
+    public Mono<Void> addCommentToBook(String comment, String title) {
+        return bookRepository.findByTitle(title).map(foundedBook -> {
 
-        foundedBooks.forEach(foundedBook -> {
             String idOFoundedBook = foundedBook.getId();
             List<Comment> currentComments = foundedBook.getComments();
             currentComments.add(new Comment(comment));
             bookRepository.save(foundedBook);
-            printInfoAboutBook(bookRepository.findById(idOFoundedBook).get());
-        });
+            bookRepository.findById(idOFoundedBook).map(this::printInfoAboutBook);
+            return foundedBook;
+        }).then();
 
     }
 
     @Override
-    public void deleteBook(String title) {
+    public Mono<Void> deleteBook(String title) {
 
-        List<Book> foundBooks = bookRepository.findByTitle(title);
-        foundBooks.forEach(book -> {
+        return bookRepository.findByTitle(title).map(book -> {
             log.info("Found book :\n" + book);
             bookRepository.delete(book);
             log.info("Done");
-        });
+            return book;
+        }).then();
     }
 
 
-    private void printInfoAboutBook(Book book) {
-        log.info("==============");
+    private Book printInfoAboutBook(Book book) {
+
+            log.info("==============");
         log.info("ID: " + book.getId());
         log.info("Title: " + book.getTitle());
         log.info("Author: " + book.getAuthor().getName());
         log.info("Genre: " + book.getGenre().getTitle());
         book.getComments().forEach(c -> log.info("\nComment :" + c.getText()));
+        return book;
+
     }
 
 
