@@ -14,13 +14,13 @@
         <div class="col-md-4" id="center-div">
             <h3>Welcome to best Library in the Hello World!</h3>
 
-            <h5 v-if="displayedBooks.length > 0">Our Books</h5>
+            <h5 v-if="displayedBooks.length">Our Books</h5>
             <h5 v-else>Sorry, right now we don't have a books!</h5>
 
 
             <div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="displayedBooks.length">
                     <label for="searchInput">Search</label>
                     <input v-model="currentBookToSearch" id="searchInput" class="form-control" type="text"
                            name="titleForSearch"
