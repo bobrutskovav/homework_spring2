@@ -21,7 +21,7 @@ public class ReactiveSecurityConfig {
         return http.authorizeExchange()
                 .pathMatchers(HttpMethod.DELETE, "/library/book/**").hasAuthority("ROLE_ADMIN")
                 .and().authorizeExchange().anyExchange().permitAll()
-                .and().formLogin().and()
+                .and().httpBasic().and()
                 .csrf().disable().build();
     }
 

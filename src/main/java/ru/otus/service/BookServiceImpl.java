@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
         Book book = new Book();
         book.setTitle(bookTitle);
         book.setAuthor(new Author(authorName));
-        book.setGenre(new Genre());
+        book.setGenre(new Genre(bookGenre));
         book.setComments(new ArrayList<>());
 
         return bookRepository.findByTitleAndAuthorNameAndGenreTitle(

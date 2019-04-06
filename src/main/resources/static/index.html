@@ -41,13 +41,9 @@
                     </thead>
                     <tbody>
                     <tr v-for="book in displayedBooks">
-                        <td>{{book.title}}
-                        </td>
-                        <td>{{book.genre.title}}
-                        </td>
-
-                        <td>{{book.author.name}}
-                        </td>
+                        <td>{{book.title}}</td>
+                        <td>{{book.genre.title}}</td>
+                        <td>{{book.author.name}}</td>
                         <td>Comments
 
                             <span v-for="bookComment in book.comments">{{bookComment.text}}
