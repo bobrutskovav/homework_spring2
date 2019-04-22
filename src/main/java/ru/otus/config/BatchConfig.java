@@ -11,9 +11,8 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.MongoItemWriter;
+import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import ru.otus.dao.BookRepository;
 import ru.otus.domain.Book;
 
 @EnableBatchProcessing
@@ -29,22 +29,20 @@ import ru.otus.domain.Book;
 public class BatchConfig {
 
     @Autowired
+    BookRepository bookRepository;
+
+
+    @Autowired
     public JobBuilderFactory jobBuilderFactory;
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
     private Logger log = LoggerFactory.getLogger(BatchConfig.class);
 
     @Bean
-    public ItemReader<Book> bookReader() {
-        /*return new MongoItemReaderBuilder<Person>()
-                .name("mongoPersonReader")
-                .template(mongoTemplate)
-                .targetType(Person.class)
-                .jsonQuery("{}")
-                .sorts(new HashMap<>())
-                .build();*/
+    public FlatFileItemReader<Book> fileBookReader() {
+
         return new FlatFileItemReaderBuilder<Book>()
-                .name("bookItemReader")
+                .name("fileBookReader")
                 .resource(new FileSystemResource("books.csv"))
                 .delimited()
                 .names(new String[]{"title", "author", "genre"})
@@ -55,14 +53,14 @@ public class BatchConfig {
     }
 
     @Bean
-    public ItemWriter<Book> bookWriter(@Autowired MongoTemplate mongoTemplate) {
+    public MongoItemWriter<Book> mongoBookWriter(@Autowired MongoTemplate mongoTemplate) {
         MongoItemWriter<Book> writer = new MongoItemWriter<>();
         try {
             writer.setTemplate(mongoTemplate);
         } catch (Exception e) {
             log.error(e.toString());
         }
-        writer.setCollection("library");
+        writer.setCollection("book");
         return writer;
     }
 
@@ -77,21 +75,27 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job importBookJob(Step step1) {
+    public Job importBookJob(Step loadDataToMongo) {
         return jobBuilderFactory.get("importBookJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(step1)
+                .flow(loadDataToMongo)
                 .end()
                 .listener(new JobExecutionListener() {
+
+
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
 
-                        log.info("Начало job {}", jobExecution.getJobConfigurationName());
+                        log.info("Начало job {}", jobExecution.getJobInstance().getJobName());
                     }
 
                     @Override
                     public void afterJob(JobExecution jobExecution) {
-                        log.info("Конец job {}", jobExecution.getJobConfigurationName());
+                        log.info("Конец job {}", jobExecution.getJobInstance().getJobName());
+                        bookRepository.findAll().map(book -> {
+                            log.info("Загружена книга {}", book.getTitle());
+                            return book;
+                        }).subscribe();
                     }
                 })
                 .build();
@@ -99,8 +103,8 @@ public class BatchConfig {
 
 
     @Bean
-    public Step step1(ItemWriter writer, ItemReader reader, ItemProcessor itemProcessor) {
-        return stepBuilderFactory.get("step1")
+    public Step loadDataToMongo(MongoItemWriter writer, FlatFileItemReader reader, ItemProcessor itemProcessor) {
+        return stepBuilderFactory.get("loadDataToMongo")
                 .chunk(5)
                 .reader(reader)
                 .processor(itemProcessor)
