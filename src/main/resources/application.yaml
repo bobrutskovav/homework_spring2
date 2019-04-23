@@ -4,6 +4,9 @@ spring:
       database: library
   datasource:
     initialization-mode: always
+  batch:
+    job:
+      enabled: false
 logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG

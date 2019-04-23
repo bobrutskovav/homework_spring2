@@ -109,8 +109,6 @@ public class BatchConfig {
                 .reader(reader)
                 .processor(itemProcessor)
                 .writer(writer)
-
-//                .taskExecutor(new SimpleAsyncTaskExecutor())
                 .build();
 
 
