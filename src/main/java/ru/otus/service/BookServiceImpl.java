@@ -3,6 +3,9 @@ package ru.otus.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.integration.channel.RendezvousChannel;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.otus.dao.BookRepository;
@@ -12,19 +15,33 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
 
-    private Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
-
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private RendezvousChannel newBookChannel;
+
+    @Autowired
+    private RendezvousChannel monoVoidChannel;
+    private Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
+
+
+    @PostConstruct
+    public void subscribeToChannel() {
+        Book book = (Book) newBookChannel.receive().getPayload();
+        log.info("Got a new Message {}", book.getTitle());
+        Message answer = MessageBuilder.withPayload(this.storeNewBook(book.getTitle(), book.getGenre().getTitle(), book.getAuthor().getName())).build();
+        monoVoidChannel.send(answer);
+
+    }
 
 
     @Override
@@ -111,7 +128,7 @@ public class BookServiceImpl implements BookService {
 
     private Book printInfoAboutBook(Book book) {
 
-            log.info("==============");
+        log.info("==============");
         log.info("ID: " + book.getId());
         log.info("Title: " + book.getTitle());
         log.info("Author: " + book.getAuthor().getName());

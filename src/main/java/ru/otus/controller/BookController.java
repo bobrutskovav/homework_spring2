@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.integration.channel.RendezvousChannel;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,12 +23,16 @@ public class BookController {
 
     private BookService bookService;
     private BookRepository bookRepository;
+    private RendezvousChannel newBookChannel;
+    private RendezvousChannel monoVoidChannel;
 
 
     @Autowired
-    public BookController(BookService bookService, BookRepository bookRepository) {
+    public BookController(BookService bookService, BookRepository bookRepository, RendezvousChannel newBookChannel, RendezvousChannel monoVoidChannel) {
         this.bookService = bookService;
         this.bookRepository = bookRepository;
+        this.newBookChannel = newBookChannel;
+        this.monoVoidChannel = monoVoidChannel;
     }
 
     @GetMapping({"/library"})
@@ -38,7 +45,12 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> newBook(@RequestBody Book newBook) {
         log.debug("===> POST ===> CreateBook {}", newBook);
-        return bookService.storeNewBook(newBook.getTitle(), newBook.getAuthor().getName(), newBook.getGenre().getTitle());
+        // return bookService.storeNewBook(newBook.getTitle(), newBook.getAuthor().getName(), newBook.getGenre().getTitle());
+        Message<Book> message = MessageBuilder.withPayload(newBook).build();
+        newBookChannel.send(message);
+        return (Mono<Void>) monoVoidChannel.receive().getPayload();
+
+
     }
 
 
