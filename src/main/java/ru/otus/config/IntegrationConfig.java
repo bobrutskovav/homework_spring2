@@ -16,7 +16,7 @@ public class IntegrationConfig {
     }
 
     @Bean
-    RendezvousChannel monoVoidChannel() {
+    public RendezvousChannel monoVoidChannel() {
         return MessageChannels.rendezvous("monoVoidChannel").get();
     }
 
