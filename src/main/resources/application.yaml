@@ -2,7 +2,7 @@ spring:
   data:
     mongodb:
       database: library
-      host: mongodb
+      host: "mongodb"
   datasource:
     initialization-mode: always
   batch:
