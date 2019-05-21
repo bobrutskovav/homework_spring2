@@ -20,3 +20,16 @@ management:
     web:
       exposure:
         include: "*"
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      ringBufferSizeInClosedState: 10
+      ringBufferSizeInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitInterval: 10000
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+  backends:
+    booksBackend:
+      baseConfig: default

@@ -1,5 +1,6 @@
 package ru.otus.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import ru.otus.domain.Genre;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -26,7 +28,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private CommentRepository commentRepository;
 
-
+    @CircuitBreaker(name = "booksBackend")
     @Override
     public Mono<Void> storeNewBook(String bookTitle, String bookGenre, String authorName) {
         Book book = new Book();
